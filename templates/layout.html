@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+
     <base href="[[=URL('static')]]/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAAQEAAAEAIAAwAAAAFgAAACgAAAABAAAAAgAAAAEAIAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAA=="/>
@@ -9,13 +14,15 @@
     <style>.py4web-validation-error{margin-top:-16px; font-size:0.8em;color:red}</style>
     [[block page_head]]<!-- individual pages can customize header here -->[[end]]
   </head>
+
+
   <body>
     <header>
       <!-- Navigation bar -->
-      <nav class="black">
+      <nav class="white">
         <!-- Logo -->
         <a href="[[=URL('index')]]">
-          <b>py4web <script>document.write(window.location.href.split('/')[3]);</script></b>
+          <b class = "is-size-1">{nofilter}</b>
         </a>
         <!-- Do not touch this -->
         <label for="hamburger">☰</label>
@@ -46,6 +53,40 @@
           [[pass]]
         </ul>
       </nav>
+
+      <section class="hero is-black is-small">
+        <div class="container">
+          <div class="hero-head">
+
+              <a class="is-size-4">
+                Music discussion made simple.
+              </a>
+        </div>
+  </div>
+
+        <div class="hero-body">
+    <div class="container has-text-centered">
+      <p class="title">
+      </p>
+      <p class="subtitle">
+      </p>
+    </div>
+  </div>
+
+  <!-- Hero footer: will stick at the bottom -->
+  <div class="hero-foot">
+    <nav class="tabs is-fullwidth">
+      <div class="container">
+        <ul>
+          <li class="is-active"><a>Home</a></li>
+          <li><a>Lyrics</a></li>
+          <li><a>About us</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</section>
+
     </header>
     <!-- beginning of HTML inserted by extending template -->
     <center>
@@ -68,4 +109,5 @@
   <!-- You've gotta have utils.js -->
   <script src="js/utils.js"></script>
   [[block page_scripts]]<!-- individual pages can add scripts here -->[[end]]
+
 </html>
