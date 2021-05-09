@@ -36,12 +36,10 @@ def index():
     message = T("Hello {first_name}".format(**user) if user else "Hello")
     return dict(message=message)
 
-@action('lyrics')
-@action.uses(db, 'lyrics.html')
+@unauthenticated("lyrics", "lyrics.html")
 def lyrics():
     return dict()
     
-@action('about')
-@action.uses(db, 'about.html')
+@unauthenticated("about", "about.html")
 def about():
     return dict()
