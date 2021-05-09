@@ -37,11 +37,11 @@ def index():
     return dict(message=message)
 
 @action('lyrics')
-@action.uses(db, auth.user, 'lyrics.html')
+@action.uses(db, 'lyrics.html')
 def lyrics():
     return dict()
     
 @action('about')
-@action.uses(db, auth.user, 'about.html')
+@action.uses(db, 'about.html')
 def about():
     return dict()
