@@ -35,3 +35,13 @@ def index():
     user = auth.get_user()
     message = T("Hello {first_name}".format(**user) if user else "Hello")
     return dict(message=message)
+
+@action('lyrics')
+@action.uses(db, auth.user, 'lyrics.html')
+def lyrics():
+    return dict()
+    
+@action('about')
+@action.uses(db, auth.user, 'about.html')
+def about():
+    return dict()
