@@ -12,11 +12,23 @@
       Search for music lyrics.
     </p>
       <p>
-          Find and discuss the lyrics of your favorite music.
+          You should be able to search for bands/albums/songs here, or better yet in the header from any page.
+          But until then I'm putting a table with all the bands in the DB here for testing purposes.
       </p>
 
+      
+      
   </div>
 </section>
-
+<table>
+    <tr>
+        <th>Bands</th>
+    </tr>
+    [[for band in bands:]]
+    <tr>
+        <td><a href="[[=URL('band', band.name)]]">[[=band.name]]</a></td>
+    </tr>
+    [[pass]]
+</table>
 </body>
 

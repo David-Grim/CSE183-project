@@ -47,7 +47,7 @@ db.define_table(
     Field('band_id', type='reference band'),
     Field('album_id', type='reference album'),
     Field('name', requires=IS_NOT_EMPTY()),
-    Field('lines') #placeholder
+    Field('lines', type='text') #placeholder
 )
 db.song.id.readable = db.song.id.writable = False
 db.song.band_id.readable = db.song.band_id.writable = False
