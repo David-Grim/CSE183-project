@@ -43,3 +43,7 @@ def lyrics():
 @unauthenticated("about", "about.html")
 def about():
     return dict()
+    
+@unauthenticated("profile", "profile.html")
+def profile():
+    return dict()    
