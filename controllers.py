@@ -125,7 +125,7 @@ def add_song(band_id=None, album_id=None):
             band_id = band_id,
             album_id = album_id,
             name = form.vars['name'],
-            lines = form.vars['lyrics']
+            lines = form.vars['lyrics'].split('\r\n')
         )
         redirect(URL('album/', db.album[album_id].name))
     return dict(form=form)

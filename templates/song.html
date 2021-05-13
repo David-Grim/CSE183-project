@@ -27,18 +27,17 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <!-- <th>Line #</th> -->
                             <th>Lyrics</th>
-                            <th>Line #</th>
                         </tr>
                     </thead>
                     <tbody>
+                        [[for i,line in enumerate(song.lines):]]
                         <tr>
-                            <td>[[=song.lines]]</td>
-                            <td>1</td>
+                            <!-- <td>[[=i+1]]</td> We probably don't want to display line #s. We can just hypertext the lines to a comment form or existing comment thread -->
+                            <td>[[=line]]</td>
                         </tr>
-                        <tr>
-                            Song lyrics aren't being split into lines yet. We should probably do that.
-                        </tr>
+                        [[pass]]
                     </tbody>
                 </table>
                 <a class="button is-primary" href="[[=URL('add_song', band.id, album.id)]]">
