@@ -1,0 +1,51 @@
+[[extend 'layout.html']]
+
+<!-- This page displays info for a specific band
+     Focus was entirely on db retrieval...
+     so it needs serious touching up or redesign -->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+</head>
+<body style="background-color: white">
+<section class="hero is-dark is full">
+  <div class="hero-body">
+    <img class="image is-128x128" src=[[=URL('download',band.image)]]>
+    </figure>
+    <p class="title">[[=band.name]]</p>
+      <p>
+        <table class="table is-striped is-fullwidth">
+            <tr>
+                <th>Bio</th>  
+            </tr>
+            <tr>
+                <td><i>[[=band.bio]]</i></td>
+            </tr>
+            <tr>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Album</th>
+                            <th>Release Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [[for album in albums:]]
+                        <tr>
+                            <td><a class="has-text-link" href="[[=URL('album', album.name)]]">[[=album.name]]</a></td>
+                            <td>[[=album.date]]</td>
+                        </tr>
+                        [[pass]]
+                    </tbody>
+                </table>
+                <a class="button is-primary" href="[[=URL('add_album', band.id)]]">
+                    <span>Add an Album</span>
+                </a>
+            </tr>
+        </table>
+      </p>
+  </div>
+</section>
+</body>

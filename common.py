@@ -99,7 +99,7 @@ auth_button_classes = {
     "submit": "button is-primary",
 }
 
-auth.use_username = False
+auth.use_username = True
 auth.param.button_classes = auth_button_classes
 auth.param.registration_requires_confirmation = False
 auth.param.registration_requires_approval = False

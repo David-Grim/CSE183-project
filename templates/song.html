@@ -1,0 +1,54 @@
+[[extend 'layout.html']]
+
+<!-- This page displays info for a specific song
+     Focus was entirely on db retrieval...
+     so it needs serious touching up or redesign -->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+</head>
+<body style="background-color: white">
+<section class="hero is-dark is full">
+  <div class="hero-body">
+    <img class="image is-128x128" src=[[=URL('download',album.image)]]>
+    </figure>
+    <p class="title">[[=song.name]]</p>
+      <p>
+        <table class="table is-striped is-fullwidth">
+            <tr>
+                <th>Artist: <a class="has-text-link" href="[[=URL('band', band.name)]]">[[=band.name]]</a></th>  
+            </tr>
+            <tr>
+                <th>Album: <a class="has-text-link" href="[[=URL('album', album.name)]]">[[=album.name]]</a></th>  
+            </tr>
+            <tr>
+                <td><i>Released: [[=album.date]]</i></td>
+            </tr>
+            <tr>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <!-- <th>Line #</th> -->
+                            <th>Lyrics</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [[for i,line in enumerate(song.lines):]]
+                        <tr>
+                            <!-- <td>[[=i+1]]</td> We probably don't want to display line #s. We can just hypertext the lines to a comment form or existing comment thread -->
+                            <td>[[=line]]</td>
+                        </tr>
+                        [[pass]]
+                    </tbody>
+                </table>
+                <a class="button is-primary" href="[[=URL('add_song', band.id, album.id)]]">
+                    <span>Add a Song</span>
+                </a>
+            </tr>
+        </table>
+      </p>
+  </div>
+</section>
+</body>
