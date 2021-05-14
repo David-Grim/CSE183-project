@@ -19,7 +19,7 @@ db.define_table(
     'profile',
     Field('user_id', type='reference auth_user', unique=True),
     Field('avatar', type='upload'),
-    Field('bio')
+    Field('bio', type='text')
 )
 db.profile.user_id.readable = db.profile.user_id.writable = False
 db.profile.id.readable = db.profile.id.writable = False
@@ -28,7 +28,7 @@ db.define_table(
     'band',
     Field('name', requires=IS_NOT_EMPTY()),
     Field('image', type='upload'),
-    Field('bio')
+    Field('bio', type='text')
 )
 db.band.id.readable = db.band.id.writable = False
 

@@ -1,4 +1,4 @@
-timestamp: 2021-03-30T11:37:02.021710
+timestamp: 2021-05-13T23:52:40.349487
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "username" CHAR(512) UNIQUE,
@@ -12,53 +12,22 @@ CREATE TABLE "auth_user"(
     "past_passwords_hash" TEXT
 );
 success!
-timestamp: 2021-03-30T11:37:02.022831
+timestamp: 2021-05-13T23:52:40.772571
 CREATE TABLE "auth_user_tag_groups"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "path" CHAR(512),
     "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
 );
 success!
-timestamp: 2021-05-11T19:30:02.163590
-ALTER TABLE "album" ADD "name" CHAR(512);
-timestamp: 2021-05-11T19:32:01.807977
-ALTER TABLE "album" ADD "name" CHAR(512);
-timestamp: 2021-05-11T19:33:17.404607
-ALTER TABLE "album" ADD "name" CHAR(512);
-timestamp: 2021-05-11T19:33:18.545791
-ALTER TABLE "album" ADD "name" CHAR(512);
-timestamp: 2021-05-11T19:33:35.584012
-ALTER TABLE "album" ADD "name" CHAR(512);
-timestamp: 2021-05-11T19:34:31.737611
-CREATE TABLE "auth_user"(
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "username" CHAR(512) UNIQUE,
-    "email" CHAR(512) UNIQUE,
-    "password" CHAR(512),
-    "first_name" CHAR(512),
-    "last_name" CHAR(512),
-    "sso_id" CHAR(512),
-    "action_token" CHAR(512),
-    "last_password_change" TIMESTAMP,
-    "past_passwords_hash" TEXT
-);
-success!
-timestamp: 2021-05-11T19:34:31.815148
-CREATE TABLE "auth_user_tag_groups"(
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "path" CHAR(512),
-    "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
-);
-success!
-timestamp: 2021-05-11T19:34:31.962238
+timestamp: 2021-05-13T23:52:40.926440
 CREATE TABLE "profile"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE   UNIQUE,
     "avatar" CHAR(512),
-    "bio" CHAR(512)
+    "bio" TEXT
 );
 success!
-timestamp: 2021-05-11T19:34:32.027863
+timestamp: 2021-05-13T23:52:40.991339
 CREATE TABLE "band"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "name" CHAR(512),
@@ -66,24 +35,25 @@ CREATE TABLE "band"(
     "bio" CHAR(512)
 );
 success!
-timestamp: 2021-05-11T19:34:32.089985
+timestamp: 2021-05-13T23:52:41.052729
 CREATE TABLE "album"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "band_id" INTEGER REFERENCES "band" ("id") ON DELETE CASCADE  ,
     "name" CHAR(512),
-    "image" CHAR(512)
+    "image" CHAR(512),
+    "date" DATE
 );
 success!
-timestamp: 2021-05-11T19:34:32.149297
+timestamp: 2021-05-13T23:52:41.112356
 CREATE TABLE "song"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "band_id" INTEGER REFERENCES "band" ("id") ON DELETE CASCADE  ,
     "album_id" INTEGER REFERENCES "album" ("id") ON DELETE CASCADE  ,
     "name" CHAR(512),
-    "lines" CHAR(512)
+    "lines" TEXT
 );
 success!
-timestamp: 2021-05-11T19:34:32.209985
+timestamp: 2021-05-13T23:52:41.173214
 CREATE TABLE "comment"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
@@ -92,8 +62,5 @@ CREATE TABLE "comment"(
     "line_number" CHAR(512),
     "text" CHAR(512)
 );
-success!
-timestamp: 2021-05-11T19:34:44.694410
-ALTER TABLE "album" ADD "date" DATE;
 success!
 success!

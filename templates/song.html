@@ -18,7 +18,10 @@
       <p>
         <table class="table is-striped is-fullwidth">
             <tr>
-                <th>By <a class="has-text-link" href="[[=URL('band', band.name)]]">[[=band.name]]</a></th>  
+                <th>Artist: <a class="has-text-link" href="[[=URL('band', band.name)]]">[[=band.name]]</a></th>  
+            </tr>
+            <tr>
+                <th>Album: <a class="has-text-link" href="[[=URL('album', album.name)]]">[[=album.name]]</a></th>  
             </tr>
             <tr>
                 <td><i>Released: [[=album.date]]</i></td>

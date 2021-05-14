@@ -33,6 +33,7 @@ from py4web.utils.form import Form, FormStyleBulma
 from .common import Field
 from pydal.validators import *
 
+
 url_signer = URLSigner(session)
 
 
@@ -52,9 +53,32 @@ def lyrics():
 def about():
     return dict()
     
-@unauthenticated("profile", "profile.html")
+@action("profile")
+@action.uses(db, auth.user, "profile.html")
 def profile():
-    return dict()
+    user = auth.get_user()
+    print(user)
+    db.profile.update_or_insert(user_id = user["id"])
+    profile = db(db.profile.user_id == user["id"]).select().first()
+    return dict(user=user, profile=profile)
+    
+@action("edit_profile", method=["GET", "POST"])
+@action.uses(db, session, auth.user, "form.html")
+def edit_profile():
+    user = auth.get_user()
+    db.profile.update_or_insert(user_id = user["id"])
+    profile = db.profile[user["id"]]
+    form = Form([
+        Field('avatar', type='upload'),
+        Field('bio', type='text')],
+        csrf_session=session, formstyle=FormStyleBulma)
+    if form.accepted:
+        db(db.profile.user_id == user["id"]).validate_and_update(
+            avatar = form.vars['avatar'],
+            bio = form.vars['bio']
+            )
+        redirect(URL('profile'))
+    return dict(profile=profile, form=form)
 
 @action('add_band', method=["GET", "POST"])
 @action.uses(db, session, auth.user, 'form.html')

@@ -1,5 +1,4 @@
 [[extend 'layout.html']]
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name = "viewport" content="width=device-width, initial-scale=1.0">
@@ -9,18 +8,18 @@
 <section class="hero is-dark is full">
   <div class="hero-body">
     <figure class="image is-64x64">
-        <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+        <img class="is-rounded" src=[[=URL('download',profile.avatar)]]> <!-- old placeholder gfx: src="https://bulma.io/images/placeholders/128x128.png" -->
     </figure>
     <p class="title">
       Profile
-                     <a class="button is-primary">
+                     <a class="button is-primary"  href="[[=URL('edit_profile')]]">
                      <span class="icon"><i class="fa fa-fw fa-edit"></i></span>
                 </a>
     </p>
       <p>
         <table class="table is-striped is-fullwidth">
             <tr>
-                <th>Username</th>  
+                <th>[[=user["username"] ]]</th>  
             </tr>
             <tr>
                 <th><i>Bio goes here, but today will be used to explain this page.
