@@ -15,11 +15,16 @@
           You should be able to search for bands/albums/songs here, or better yet in the header from any page.
           But until then I'm putting a table with all the bands in the DB here for testing purposes.
       </p>
-
-      
-      
   </div>
 </section>
+
+<div class="section" id="vue-target" v-cloak>
+  <div class="control block">
+    <input class="input" type="text" v-model="query" @keyup="search" />
+  </div>
+  <div v-for="r in results">{{r}}</div>
+</div>
+
 <table>
     <tr>
         <th>Bands</th>
@@ -34,3 +39,10 @@
 <a class="button is-primary" href="[[=URL('add_band')]]">Add Band</a>
 </body>
 
+[[block page_scripts]]
+<!-- Loads the index-specific js for Vue -->
+<script>
+  let search_url = "[[=XML(search_url)]]";
+</script>
+<!--<script src="js/search.js"></script>-->
+[[end]]

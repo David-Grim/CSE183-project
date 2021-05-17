@@ -32,24 +32,29 @@ from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
 from py4web.utils.form import Form, FormStyleBulma
 from pydal.validators import *
+import uuid
+import random
 
 url_signer = URLSigner(session)
 
+
+
 @action('index')
-@action.uses(db, 'index.html')
+@action.uses(db, auth.user,'index.html')
 def index():
     user = auth.get_user()
     message = T("Hello {first_name}".format(**user) if user else "Hello")
     return dict(message=message)
 
 @action("lyrics")
-@action.uses(db, "lyrics.html")
+@action.uses(db, auth.user,"lyrics.html")
 def lyrics():
     bands = db(db.band.name).select()
-    return dict(bands=bands)
+    return dict(bands = bands,
+                search_url = URL('search', signer=url_signer))
     
 @action("about")
-@action.uses(db, "about.html")
+@action.uses(db, auth.user, "about.html")
 def about():
     return dict()
     
@@ -122,7 +127,7 @@ def add_album(band_id=None):
     return dict(form=form)
     
 @action('album/<album_name>')
-@action.uses(db, 'album.html')
+@action.uses(db, auth.user, 'album.html')
 def album(album_name=None):
     assert album_name is not None
     n = album_name.replace('_',' ')
@@ -154,7 +159,7 @@ def add_song(band_id=None, album_id=None):
     return dict(form=form)
     
 @action('song/<song_name>')
-@action.uses(db, 'song.html')
+@action.uses(db, auth.user,'song.html')
 def song(song_name=None):
     assert song_name is not None
     n = song_name.replace('_',' ')
@@ -164,3 +169,14 @@ def song(song_name=None):
     band = db(db.band.id == song.band_id).select().first()
     album = db(db.album.id == song.album_id).select().first()
     return dict(song=song, album=album, band=band)
+
+# Search function for search bar in lyrics section.
+#---TO BE COMPLETED----
+
+@action('search')
+@action.uses()
+def search():
+    q = request.params.get("id")
+    results = [q + ":" + str(uuid.uuid1()) for _ in range(random.randint(2, 6))]
+    print(results)
+    return dict(results=results)
