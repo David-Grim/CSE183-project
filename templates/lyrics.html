@@ -1,5 +1,11 @@
 [[extend 'layout.html']]
 
+<style>
+[v-cloak] {
+     display: none;
+}
+</style>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name = "viewport" content="width=device-width, initial-scale=1.0">
@@ -22,6 +28,7 @@
   <div class="control block">
     <input class="input" type="text" v-model="query" @keyup="search" />
   </div>
+
   <div v-for="r in results">{{r}}</div>
 </div>
 
@@ -44,5 +51,7 @@
 <script>
   let search_url = "[[=XML(search_url)]]";
 </script>
-<!--<script src="js/search.js"></script>-->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<script src="js/search.js"></script>
 [[end]]

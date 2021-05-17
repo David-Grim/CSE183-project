@@ -176,7 +176,7 @@ def song(song_name=None):
 @action('search')
 @action.uses()
 def search():
-    q = request.params.get("id")
+    q = request.params.get("q")
     results = [q + ":" + str(uuid.uuid1()) for _ in range(random.randint(2, 6))]
     print(results)
     return dict(results=results)
