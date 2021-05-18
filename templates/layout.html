@@ -13,16 +13,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
     <style>.py4web-validation-error{margin-top:-16px; font-size:0.8em;color:red}</style>
     [[block page_head]]<!-- individual pages can customize header here -->[[end]]
+    <style>
+    body {
+  background-color: black;
+  font-family: cursive;
+}
+
+    .glow {
+  font-size: 80px;
+  color: #fff;
+  text-align: center;
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073, 0 0 20px #e60073, 0 0 25px #e60073, 0 0 30px #e60073, 0 0 35px #e60073;
+  }
+  
+  to {
+    text-shadow: 0 0 10px #fff, 0 0 15px #ff4da6, 0 0 20px #ff4da6, 0 0 25px #ff4da6, 0 0 30px #ff4da6, 0 0 35px #ff4da6, 0 0 40px #ff4da6;
+  }
+}</style>
   </head>
 
 
   <body>
     <header>
       <!-- Navigation bar -->
-      <nav class="white">
+      <nav class="black">
         <!-- Logo -->
         <a href="[[=URL('index')]]">
-          <b class = "is-size-1">{nofilter}</b>
+          <b class = "is-size-1 glow">{nofilter}</b>
         </a>
         <!-- Do not touch this -->
         <label for="hamburger">☰</label>
@@ -58,7 +80,7 @@
         <div class="container">
           <div class="hero-head">
 
-              <a class="is-size-4">
+              <a class="is-size-4 glow">
                 Music discussion made simple.
               </a>
         </div>
@@ -75,7 +97,7 @@
 
   <!-- Hero footer: will stick at the bottom -->
   <div class="hero-foot">
-    <nav class="tabs is-fullwidth">
+    <nav class="tabs is-fullwidth glow">
       <div class="container">
         <ul>
           <li><a class="is-active" href="[[=URL('index')]]">Home</a></li>
@@ -102,7 +124,7 @@
     </center>
     <!-- end of HTML inserted by extending template -->
     <footer class="black padded">
-      <p>
+      <p class=" glow is-size-1">
         Made with py4web
       </p>
     </footer>
