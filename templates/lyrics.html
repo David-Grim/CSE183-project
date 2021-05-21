@@ -4,7 +4,23 @@
 [v-cloak] {
      display: none;
 }
+.spacer30 {
+  margin: 600px 0;
+}
+#go {
+  float: right;
+  width: 50px;
+}
+#searchItem {
+  float: left;
+  width: 200px;
+
+}
+.input-group {
+  width: 260px;
+}
 </style>
+
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -32,6 +48,8 @@
   <div v-for="r in results">{{r}}</div>
 </div>
 
+
+
 <table>
     <tr>
         <th>Bands</th>
@@ -45,6 +63,7 @@
 </table>
 <a class="button is-primary" href="[[=URL('add_band')]]">Add Band</a>
 </body>
+
 
 [[block page_scripts]]
 <!-- Loads the index-specific js for Vue -->

@@ -15,10 +15,20 @@
           The goal of this project is to give users a clean interface for sharing and discussing lyrics
           from their favorite music.
       </p>
-
   </div>
 </section>
+<table>
+            <tr>
+                <th>Newly added lyrics</th>
+            </tr>
+            [[for song in songs[:10]:]]
+            <tr>
+            <td><a href="[[=URL('song', song.name)]]">[[=song.name]]</a></td>
+                <td><a>[[=song.band_id]]</a></td>
+            </tr>
+            [[pass]]
 
+  </table>
 </body>
 
 

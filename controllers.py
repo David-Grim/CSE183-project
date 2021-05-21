@@ -29,28 +29,31 @@ from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash, Field
 from py4web.utils.url_signer import URLSigner
-from .models import get_user_email
+from .models import get_user_email, get_time
 from py4web.utils.form import Form, FormStyleBulma
 from pydal.validators import *
-import uuid
-import random
+
 
 url_signer = URLSigner(session)
 
 
 
 @action('index')
-@action.uses(db, auth.user,'index.html')
+@action.uses(db, auth.user, 'index.html')
 def index():
+    songs = db(db.song.name).select(orderby=~db.song.time_added)
+    #need to somehow pull the band name here as well
     user = auth.get_user()
     message = T("Hello {first_name}".format(**user) if user else "Hello")
-    return dict(message=message)
+    return dict(message=message, songs = songs, band = band)
 
 @action("lyrics")
 @action.uses(db, auth.user,"lyrics.html")
 def lyrics():
     bands = db(db.band.name).select()
+    songs = db(db.song.name).select()
     return dict(bands = bands,
+                songs = songs,
                 search_url = URL('search', signer=url_signer))
     
 @action("about")
@@ -94,7 +97,7 @@ def add_band():
     
 #info pages use band/ablum/song names in URL for easy access
 @action('band/<band_name>')
-@action.uses(db, 'band.html')
+@action.uses(db, auth.user, 'band.html')
 def band(band_name=None):
     assert band_name is not None
     n = band_name.replace('_',' ')
@@ -161,14 +164,25 @@ def add_song(band_id=None, album_id=None):
 @action('song/<song_name>')
 @action.uses(db, auth.user,'song.html')
 def song(song_name=None):
+    email = get_user_email()
+    name = auth.current_user.get('first_name') + " " + auth.current_user.get("last_name")
     assert song_name is not None
     n = song_name.replace('_',' ')
-    song = db(db.song.name.like(n, case_sensitive=False)).select().first()
+    song = db(db.song.name.like(n, case_sensitive = False)).select().first()
     if song is None:
         redirect(URL('index'))
     band = db(db.band.id == song.band_id).select().first()
     album = db(db.album.id == song.album_id).select().first()
-    return dict(song=song, album=album, band=band)
+    return dict(song=song,
+                album=album,
+                band=band,
+                load_posts_url = URL('load_posts', signer=url_signer),
+                add_post_url = URL('add_post', signer=url_signer),
+                delete_post_url = URL('delete_post', signer=url_signer),
+                post_thumbs_url = URL('post_thumbs', signer=url_signer),
+                user_email = email,
+                username = name,
+                )
 
 # Search function for search bar in lyrics section.
 #---TO BE COMPLETED----
@@ -177,6 +191,74 @@ def song(song_name=None):
 @action.uses()
 def search():
     q = request.params.get("q")
-    results = [q + ":" + str(uuid.uuid1()) for _ in range(random.randint(2, 6))]
-    print(results)
-    return dict(results=results)
+    results = [q]
+    #results = [q + ":" + str(uuid.uuid1()) for _ in range(random.randint(2, 6))]
+    return dict(results = results)
+
+
+#--Code just for the comments section-----------
+
+@action('load_posts')
+@action.uses(url_signer.verify(), db)
+def load_posts():
+    conf_post = []
+    posts = db(db.comment).select(db.comment.id, orderby=~db.comment.datetime).as_list()
+    for post in posts:
+        conf_post.append(configure_post(post["id"]))
+    return dict(posts = conf_post)
+
+
+@action('add_post', method = "POST")
+@action.uses(url_signer.verify(), db)
+def add_post():
+    text = request.json.get('post_text')
+    id = db.comment.insert(
+        post_text = text,
+        user_email = get_user_email(),
+        datetime = get_time(),
+    )
+    post = db.comment[id]
+    post = configure_post(post.id)
+    return dict(post = post)
+
+@action('delete_post', method = "POST")
+@action.uses(url_signer.verify(), db)
+def delete_post():
+    comment_id = request.json.get('comment_id')
+    post = db.comment[comment_id]
+    user_email = post.user_email
+    if user_email == auth.current_user.get("email") and comment_id is not None:
+        db(db.comment.id == comment_id).delete()
+    return "ok"
+
+@action('post_thumbs', method = "POST")
+@action.uses(url_signer.verify(), db)
+def post_thumbs():
+    comment_id = request.json.get('comment_id')
+    rating = request.json.get('rating')
+    user_email = auth.current_user.get("email")
+
+
+    db.thumbs.update_or_insert(
+        (comment_id == db.thumbs.comment_id )&(user_email == db.thumbs.user_email),
+        rating = rating,
+        comment_id = comment_id,
+        user_email = user_email,
+    )
+
+    post = configure_post(comment_id)
+    return dict(post = post)
+
+
+def configure_post(post_id):
+    thumbs = db(db.thumbs.comment_id == post_id).select().as_list()
+    for thumb in thumbs:
+        user = db(db.auth_user.email == thumb["user_email"]).select().first()
+        name = user.first_name + " " + user.last_name if user is not None else "Unknown"
+        thumb["name"] = name
+    user = db(db.auth_user.email == db.comment[post_id].user_email).select().first()
+    author = user.first_name + " " + user.last_name if user is not None else "Unknown"
+    post = db.comment[post_id].as_dict()
+    post["author"] = author
+    post["thumbs"] = thumbs
+    return post

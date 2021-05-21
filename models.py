@@ -38,7 +38,8 @@ db.define_table(
     'band',
     Field('name', requires=IS_NOT_EMPTY()),
     Field('image', type='upload'),
-    Field('bio', type='text')
+    Field('bio', type='text'),
+    Field('time_added', default = get_time())
 )
 db.band.id.readable = db.band.id.writable = False
 
@@ -47,7 +48,8 @@ db.define_table(
     Field('band_id', type='reference band'),
     Field('name', requires=IS_NOT_EMPTY()),
     Field('image', type='upload'),
-    Field('date', type='date', requires=IS_DATE())
+    Field('date', type='date', requires=IS_DATE()),
+    Field('time_added', default = get_time())
 )
 db.album.id.readable = db.album.id.writable = False
 db.album.band_id.readable = db.album.band_id.writable = False
@@ -57,7 +59,8 @@ db.define_table(
     Field('band_id', type='reference band'),
     Field('album_id', type='reference album'),
     Field('name', requires=IS_NOT_EMPTY()),
-    Field('lines', type='list:string')
+    Field('lines', type='list:string'),
+    Field('time_added', default = get_time())
 )
 db.song.id.readable = db.song.id.writable = False
 db.song.band_id.readable = db.song.band_id.writable = False
@@ -69,12 +72,20 @@ db.define_table(
     Field('song_id', type='reference song'),
     Field('datetime', type='datetime', default=datetime.datetime.utcnow(), requires=IS_DATETIME()),
     Field('line_number'),
-    Field('text', requires=IS_NOT_EMPTY())
+    Field('post_text', requires=IS_NOT_EMPTY()),
+    Field('user_email', default= get_user_email()),
 )
 db.comment.id.readable = db.comment.id.writable = False
 db.comment.user_id.readable = db.comment.user_id.writable = False
 db.comment.song_id.readable = db.comment.song_id.writable = False
 db.comment.datetime.writable = False
+
+
+db.define_table('thumbs',
+                Field('user_email', default = get_user_email()),
+                Field('comment_id', 'reference comment'),
+                Field('rating', 'integer', default = 0)
+                )
 
 
 db.commit()

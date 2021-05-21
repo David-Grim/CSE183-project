@@ -12,6 +12,7 @@ let init = (app) => {
         // Complete as you see fit.
         query: "",
         results: [],
+        songs: [],
     };
 
     app.enumerate = (a) => {

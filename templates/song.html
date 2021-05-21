@@ -8,6 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name = "viewport" content="width=device-width, initial-scale=1.0">
     <link rel = "stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css">
 </head>
 <body style="background-color: white">
 <section class="hero is-dark is full">
@@ -27,7 +28,7 @@
                 <td><i>Released: [[=album.date]]</i></td>
             </tr>
             <tr>
-                <table class="table">
+                <table class="table is-striped">
                     <thead>
                         <tr>
                             <!-- <th>Line #</th> -->
@@ -52,3 +53,88 @@
   </div>
 </section>
 </body>
+
+
+<div class = "column" id="vue-target">
+  <div id = "comments" class="section">
+    <div class="title">Comments</div>
+  </div>
+
+
+  <div class="section">
+      <!--Section for showing the form to write a post-->
+      <div v-if="add_mode">
+        <div class="field">
+          <textarea v-model="post_text" class="textarea" placeholder="Type something!"></textarea>
+        </div>
+        <button v-on:click="add_post(); set_new_post(false)" class="button is-primary is-size-5">Post</button>
+        <button v-on:click="reset_post(); set_new_post(false)" class="button is-warning is-size-5">Cancel</button>
+      </div>
+
+      <!--Section for when the form shouldn't be on the screen-->
+      <div v-if="!add_mode">
+        <button v-on:click="set_new_post(true)" class="button is-primary is-size-5">
+          <i class="fa fa-plus fa-fw"></i>
+        </button>
+      </div>
+  </div>
+
+    <!--set the posts to display with text, the posts author and the thumbs up and down buttons-->
+  <div class="section">
+    <div class="tile is-ancestor is-vertical">
+        <div v-for="post in posts" class="tile notification is-light is-child is-size-5">
+            <div>{{post.post_text}}</div>
+            <div class="is-size-5 has-text-grey">{{post.author}}</div>
+            <div class="is-size-3">
+              <span v-on:click="delete_post(post.id)" v-if="post.user_email == user_email" class="has-text-danger is-pulled-right">
+                <i class="fa fa-trash fa-fw"></i>
+              </span>
+              <span class="has-text-info" v-on:mouseenter="set_hover_post(post.id)" v-on:mouseleave="set_hover_post(-1)">
+
+                  <!--set thumbs up button functionality-->
+                <span>
+                  <i v-on:click="set_post_thumbs(post.id, 0)"
+                  v-if="post_rating(post,1)" class="fa fa-flip-horizontal fa-thumbs-up"></i>
+                  <i v-on:click="set_post_thumbs(post.id, 1)"
+                  v-if="!post_rating(post,1)" class="fa fa-flip-horizontal fa-thumbs-o-up"></i>
+                </span>
+
+                  <!--set thumbs down button functionality-->
+                <span>
+                  <i v-on:click="set_post_thumbs(post.id,0)" v-if="post_rating(post,-1)"
+                  class="fa fa-thumbs-down"></i>
+                  <i v-on:click="set_post_thumbs(post.id,-1)" v-if="!post_rating(post,-1)"
+                  class="fa fa-thumbs-o-down"></i>
+                </span>
+              </span>
+
+                <!--set the likers and dislikers to display when mouse is hovered over buttons-->
+              <span v-if="hover_post == post.id" class="has-text-info">
+                <span v-if="post.likes.length > 0" class="is-size-6">
+                  Liked by:<span v-for="like in post.likes"> {{like.name}}<span v-if="post.likes.length > 1">,</span></span>
+                </span>
+                <span v-if="post.dislikes.length > 0" class="is-size-6">
+                  Disliked by:<span v-for="dislike in post.dislikes"> {{dislike.name}}<span v-if="post.dislikes.length > 1">,</span></span>
+                </span>
+
+              </span>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+[[block page_scripts]]
+<script>
+  let load_posts_url = "[[=XML(load_posts_url)]]";
+  let add_post_url = "[[=XML(add_post_url)]]";
+  let delete_post_url = "[[=XML(delete_post_url)]]";
+  let post_thumbs_url = "[[=XML(post_thumbs_url)]]";
+  let user_email = "[[=XML(user_email)]]";
+  let username = "[[=XML(username)]]";
+</script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<script src="js/comments.js"></script>
+[[end]]
