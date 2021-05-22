@@ -15,7 +15,7 @@
     [[block page_head]]<!-- individual pages can customize header here -->[[end]]
     <style>
     body {
-  background-color: black;
+  background-color: #000;
   font-family: cursive;
 }
 
@@ -35,7 +35,9 @@
   }
 }
 
-
+#darkblack {
+color:#000;
+}
 
 </style>
   </head>
@@ -44,10 +46,10 @@
   <body>
     <header>
       <!-- Navigation bar -->
-      <nav class="black">
+      <nav>
         <!-- Logo -->
         <a href="[[=URL('index')]]">
-          <b class = "is-size-1 glow">{nofilter}</b>
+          <b class = "is-size-1 glow" >{nofilter}</b>
         </a>
         <!-- Do not touch this -->
         <label for="hamburger">☰</label>
@@ -79,11 +81,10 @@
         </ul>
       </nav>
 
-      <section class="hero is-black is-small">
+      <section class="hero is-black is-small ">
         <div class="container">
           <div class="hero-head">
-
-              <a class="is-size-4 glow">
+              <a class="is-size-4 glow" >
                 Music discussion made simple.
               </a>
         </div>
@@ -99,7 +100,7 @@
   </div>
 
   <!-- Hero footer: will stick at the bottom -->
-  <div class="hero-foot">
+  <div class="hero-foot" id="darkblack">
     <nav class="tabs is-fullwidth glow">
       <div class="container">
         <ul>
@@ -118,7 +119,7 @@
     <center>
       <div>
         <!-- Flash alert messages, first optional one in data-alert -->
-        <flash-alerts class="padded" data-alert="[[=globals().get('flash','')]]"></flash-alerts>
+        <flash-alerts class = "padded" data-alert="[[=globals().get('flash','')]]"></flash-alerts>
       </div>
       <main class="padded">
         <!-- contect injected by extending page -->
@@ -126,7 +127,7 @@
       </main>
     </center>
     <!-- end of HTML inserted by extending template -->
-    <footer class="black padded">
+    <footer id ="darkblack">
       <p class=" glow is-size-1">
         Made with py4web
       </p>
