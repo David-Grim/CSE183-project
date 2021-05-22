@@ -201,8 +201,9 @@ def search():
 @action('load_posts')
 @action.uses(url_signer.verify(), db)
 def load_posts():
+    song_id = id = request.params.get('song_id')
     conf_post = []
-    posts = db(db.comment).select(db.comment.id, orderby=~db.comment.datetime).as_list()
+    posts = db(db.comment.song_id == song_id).select(db.comment.id, orderby=~db.comment.datetime).as_list()
     for post in posts:
         conf_post.append(configure_post(post["id"]))
     return dict(posts = conf_post)
@@ -212,7 +213,9 @@ def load_posts():
 @action.uses(url_signer.verify(), db)
 def add_post():
     text = request.json.get('post_text')
+    song_id = request.json.get('song_id')
     id = db.comment.insert(
+        song_id = song_id,
         post_text = text,
         user_email = get_user_email(),
         datetime = get_time(),

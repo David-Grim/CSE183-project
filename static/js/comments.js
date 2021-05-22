@@ -68,6 +68,7 @@ let init = (app) => {
     app.add_post = () => {
          axios.post(add_post_url,
          {
+            song_id:song_id,
             post_text:app.vue.post_text
 
          }).then((response) => {
@@ -130,7 +131,7 @@ let init = (app) => {
 
     // And this initializes it.
     app.init = () => {
-      axios.get(load_posts_url).then((result) => {
+      axios.get(load_posts_url, {params: {"song_id": song_id}}).then((result) => {
          let posts = result.data.posts.map((post) => app.format_post_thumbs(post))
          app.vue.posts = app.enumerate(posts)
       })
