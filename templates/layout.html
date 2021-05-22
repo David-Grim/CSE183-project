@@ -38,18 +38,31 @@
 #darkblack {
 color:#000;
 }
+#white {
+color:#fff;
+}
+
+    body {
+  background-color: #000;
+}
+
+    .dblack {
+}
+
+
 
 </style>
+
   </head>
 
 
-  <body>
-    <header>
+  <body style="background-color:black;">
+    <header class = "dblack" id="darkblack">
       <!-- Navigation bar -->
-      <nav>
+      <nav >
         <!-- Logo -->
         <a href="[[=URL('index')]]">
-          <b class = "is-size-1 glow" >{nofilter}</b>
+          <b class = "is-size-1  glow">{nofilter}</b>
         </a>
         <!-- Do not touch this -->
         <label for="hamburger">☰</label>
@@ -81,10 +94,10 @@ color:#000;
         </ul>
       </nav>
 
-      <section class="hero is-black is-small ">
+      <section class="hero is-small">
         <div class="container">
           <div class="hero-head">
-              <a class="is-size-4 glow" >
+              <a class="is-size-4 glow">
                 Music discussion made simple.
               </a>
         </div>
@@ -100,21 +113,21 @@ color:#000;
   </div>
 
   <!-- Hero footer: will stick at the bottom -->
-  <div class="hero-foot" id="darkblack">
+  <div class="hero-foot">
     <nav class="tabs is-fullwidth glow">
       <div class="container">
         <ul>
-          <li><a class="is-active" href="[[=URL('index')]]">Home</a></li>
-          <li><a class="is-active" href="[[=URL('lyrics')]]">Lyrics</a></li>
-          <li><a class="is-active" href="[[=URL('about')]]">About us</a></li>
-		  <li><a class="is-active" href="[[=URL('profile')]]">Profile</a></li>
+          <li><a class="is-active" href="[[=URL('index')]]" id="white">Home</a></li>
+          <li><a class="is-active" href="[[=URL('lyrics')]]" id="white">Lyrics</a></li>
+          <li><a class="is-active" href="[[=URL('about')]]" id="white">About us</a></li>
+		  <li><a class="is-active" href="[[=URL('profile')]]" id="white">Profile</a></li>
         </ul>
       </div>
     </nav>
   </div>
 </section>
 
-    </header>
+    </header >
     <!-- beginning of HTML inserted by extending template -->
     <center>
       <div>
@@ -127,7 +140,7 @@ color:#000;
       </main>
     </center>
     <!-- end of HTML inserted by extending template -->
-    <footer id ="darkblack">
+    <footer class = "dblack">
       <p class=" glow is-size-1">
         Made with py4web
       </p>
