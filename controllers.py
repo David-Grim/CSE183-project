@@ -67,7 +67,8 @@ def profile():
     user = auth.get_user()
     db.profile.update_or_insert(user_id = user["id"])
     profile = db(db.profile.user_id == user["id"]).select().first()
-    return dict(user=user, profile=profile)
+    comments = db(db.comment.user_email == get_user_email()).select()
+    return dict(user=user, profile=profile, comments = comments)
     
 @action("edit_profile", method=["GET", "POST"])
 @action.uses(db, session, auth.user, "form.html")
@@ -161,16 +162,19 @@ def add_song(band_id=None, album_id=None):
         redirect(URL('album/', db.album[album_id].name))
     return dict(form=form)
     
-@action('song/<song_name>')
+@action('song/<song_id>')
 @action.uses(db, auth.user,'song.html')
-def song(song_name=None):
+def song(song_id=None):
     email = get_user_email()
     name = auth.current_user.get('first_name') + " " + auth.current_user.get("last_name")
-    assert song_name is not None
-    n = song_name.replace('_',' ')
-    song = db(db.song.name.like(n, case_sensitive = False)).select().first()
-    if song is None:
-        redirect(URL('index'))
+    assert song_id is not None
+
+    #assert song_name is not None
+    #n = song_name.replace('_',' ')
+    #song = db(db.song.name.like(n, case_sensitive = False)).select().first()
+    #if song is None:
+        #redirect(URL('index'))
+    song = db(db.song.id == song_id).select().first()
     band = db(db.band.id == song.band_id).select().first()
     album = db(db.album.id == song.album_id).select().first()
     return dict(song=song,
@@ -265,3 +269,5 @@ def configure_post(post_id):
     post["author"] = author
     post["thumbs"] = thumbs
     return post
+
+

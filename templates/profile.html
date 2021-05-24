@@ -26,50 +26,23 @@
 				</i></th>
             </tr>
             <tr>
-                
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Top Five Songs</th>
-                            <th>Song</th>
-                            <th>Artist</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>1</th>
-                            <th>Song 1</th>
-                            <th>Artist 1</th>
-                        </tr>
-                        <tr>
-                            <th>2</th>
-                            <th>Song 2</th>
-                            <th>Blur</th>
-                        </tr>
-                        <tr>
-                            <th>3</th>
-                            <th>Song 3</th>
-                            <th>Artist 3</th>
-							 </tr>
-                        <tr>
-                            <th>4</th>
-                            <th>Song 4</th>
-                            <th>Artist 4</th>
-                        </tr>
-                        <tr>
-                            <th>5</th>
-                            <th>Song 5</th>
-                            <th>Artist 5</th>
-                        </tr>
-                    </tbody>
-                </table>
             </tr>
-            
         </table>
-
       </p>
 
   </div>
 </section>
-
+<div class="section">
+    <div class="tile is-ancestor is-vertical">
+        Comment History:
+        [[for comment in comments:]]
+        <div class="tile notification is-light is-child is-size-5">
+            <div>[[=comment.post_text]]</div>
+            <a class="button is-link is-pulled-right"  href="[[=URL('song', comment.song_id)]]">
+                Go to song
+                </a>
+        </div>
+ [[pass]]
+    </div>
+</div>
 </body>

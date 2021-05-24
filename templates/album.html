@@ -35,7 +35,7 @@
                         [[for i,song in enumerate(songs):]]
                         <tr>
                             <td>[[=i+1]]</td>
-                            <td><a class="has-text-link" href="[[=URL('song', song.name)]]">[[=song.name]]</td>
+                            <td><a class="has-text-link" href="[[=URL('song', song.id)]]">[[=song.name]]</td>
                         </tr>
                         [[pass]]
                     </tbody>

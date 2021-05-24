@@ -42,6 +42,7 @@ db.define_table(
     Field('time_added', default = get_time())
 )
 db.band.id.readable = db.band.id.writable = False
+db.band.time_added.readable = db.band.time_added.writable = False
 
 db.define_table(
     'album',
