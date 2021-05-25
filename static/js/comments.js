@@ -12,6 +12,7 @@ let init = (app) => {
         hover_post: null,
         post_text: "",
         add_mode: false,
+        reply_id: -1,
 
     };
 
@@ -29,7 +30,7 @@ let init = (app) => {
       app.vue.hover_post = null
       let temp = app.vue.hover_post
       app.vue.hover_post = temp
-   }
+   };
 
     app.format_post_thumbs = (post) => {
       post.likes = []
@@ -50,7 +51,7 @@ let init = (app) => {
    };
 
    app.post_rating = (post,rating) => {
-      if(rating == 0){
+      if(rating === 0){
          return false
       }else{
          let x;
@@ -63,12 +64,13 @@ let init = (app) => {
          let i = x.findIndex((user) => user.user_email == user_email)
          return i != -1
       }
-   }
+   };
 
-    app.add_post = () => {
+    app.add_post = () =>
          axios.post(add_post_url,
          {
             song_id:song_id,
+            comment_id:reply_id,
             post_text:app.vue.post_text
 
          }).then((response) => {
@@ -104,12 +106,16 @@ let init = (app) => {
 
    app.set_new_post = (status) => {
       app.vue.add_mode = status
-   }
+   };
+   
+   app.set_new_reply = (id) => {
+       app.vue.reply_id = id
+   };
 
    app.reset_post = () => {
       app.vue.post_text = ""
-   }
-
+   };
+   
     app.methods = {
         reset_post: app.reset_post,
         set_hover_post: app.set_hover_post,
@@ -118,6 +124,7 @@ let init = (app) => {
         set_new_post: app.set_new_post,
         post_rating: app.post_rating,
         set_post_thumbs: app.set_post_thumbs,
+        set_new_reply: app.set_new_reply,
     };
 
 

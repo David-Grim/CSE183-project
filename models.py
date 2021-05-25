@@ -10,6 +10,9 @@ import datetime
 
 def get_user_email():
     return auth.current_user.get('email') if auth.current_user else None
+    
+def get_user_id():
+    return auth.current_user.get('id') if auth.current_user else None
 
 def get_time():
     return datetime.datetime.utcnow()
@@ -71,8 +74,9 @@ db.define_table(
     'comment',
     Field('user_id', type='reference auth_user'),
     Field('song_id', type='reference song'),
+    Field('comment_id', type='reference comment'), #if comment is reply, point to target of reply. else empty
     Field('datetime', type='datetime', default=datetime.datetime.utcnow(), requires=IS_DATETIME()),
-    Field('line_number'),
+    Field('line_number', type='integer'),
     Field('post_text', requires=IS_NOT_EMPTY()),
     Field('user_email', default= get_user_email()),
 )

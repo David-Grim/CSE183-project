@@ -86,9 +86,31 @@
             <div>{{post.post_text}}</div>
             <div class="is-size-5 has-text-grey">{{post.author}}</div>
             <div class="is-size-3">
-              <span v-on:click="delete_post(post.id)" v-if="post.user_email == user_email" class="has-text-danger is-pulled-right">
+              <span v-if="post.user_email == user_email" v-on:click="delete_post(post.id)" class="has-text-danger is-pulled-right">
                 <i class="fa fa-trash fa-fw"></i>
               </span>
+              
+              
+              
+              <!--reply button-->
+              <span v-else>
+                <span v-on:click="set_new_reply(post.id)" class="has-text-primary is-pulled-right">
+                  <i class="fa fa-reply fa-fw"></i>
+                </span>
+                
+                <div v-if="reply_id == post.id">
+                    <div class="field">
+                        <textarea v-model="reply_text" class="textarea" placeholder="Type something!"></textarea>
+                    </div>
+                    <button v-on:click="add_post(); set_new_reply(-1)" class="button is-primary is-size-5">Post</button>
+                    <button v-on:click="reset_post(); set_new_reply(-1)" class="button is-warning is-size-5">Cancel</button>
+                </div>
+              </span>
+                
+                
+                
+                
+                
               <span class="has-text-info" v-on:mouseenter="set_hover_post(post.id)" v-on:mouseleave="set_hover_post(-1)">
 
                   <!--set thumbs up button functionality-->

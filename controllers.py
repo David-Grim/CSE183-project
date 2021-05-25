@@ -29,7 +29,7 @@ from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash, Field
 from py4web.utils.url_signer import URLSigner
-from .models import get_user_email, get_time
+from .models import get_user_email, get_user_id, get_time
 from py4web.utils.form import Form, FormStyleBulma
 from pydal.validators import *
 
@@ -244,10 +244,14 @@ def load_posts():
 def add_post():
     text = request.json.get('post_text')
     song_id = request.json.get('song_id')
+    comment_id = request.json.get('comment_id')
+    if comment_id == -1:
+        comment_id = None
     id = db.comment.insert(
         song_id = song_id,
         post_text = text,
         user_email = get_user_email(),
+        user_id = get_user_id(),
         datetime = get_time(),
     )
     post = db.comment[id]
