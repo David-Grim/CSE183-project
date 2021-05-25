@@ -8,10 +8,10 @@
 <body style="background-color: white">
 <section class="hero is full ">
   <div class="hero-body">
-    <p class="title has-text-white">
+    <p class="title has-text-black">
       Welcome to No Filter.
     </p>
-      <p class ="has-text-white">
+      <p class ="has-text-black">
           The goal of this project is to give users a clean interface for sharing and discussing lyrics
           from their favorite music.
       </p>
@@ -19,11 +19,14 @@
 </section>
 <table>
             <tr>
-                <th class ="title has-text-white">Newly added lyrics</th>
+                <th class ="title has-text-black">Newly added lyrics</th>
             </tr>
-            <tr><br></tr>
+            <tr></tr>
             [[for song in songs[:10]:]]
+
             <tr>
+
+
             <td class = "is-size-5"><a href="[[=URL('song', song.id)]]">[[=song.name]]</a></td>
                 <!--<td><a>[[=song.band_id]]</a></td>-->
             </tr>
