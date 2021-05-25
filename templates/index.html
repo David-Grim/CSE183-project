@@ -9,7 +9,7 @@
 <section class="hero is-dark is full">
   <div class="hero-body">
     <p class="title">
-      Welcome to our humble website.
+      Welcome to No Filter.
     </p>
       <p>
           The goal of this project is to give users a clean interface for sharing and discussing lyrics
@@ -19,12 +19,13 @@
 </section>
 <table>
             <tr>
-                <th>Newly added lyrics</th>
+                <th class ="title has-text-white">Newly added lyrics</th>
             </tr>
+            <tr><br></tr>
             [[for song in songs[:10]:]]
             <tr>
-            <td><a href="[[=URL('song', song.id)]]">[[=song.name]]</a></td>
-                <td><a>[[=song.band_id]]</a></td>
+            <td class = "is-size-5"><a href="[[=URL('song', song.id)]]">[[=song.name]]</a></td>
+                <!--<td><a>[[=song.band_id]]</a></td>-->
             </tr>
             [[pass]]
 

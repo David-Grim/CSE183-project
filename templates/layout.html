@@ -148,6 +148,11 @@ color:#fff;
   </body>
   <!-- You've gotta have utils.js -->
   <script src="js/utils.js"></script>
-  [[block page_scripts]]<!-- individual pages can add scripts here -->[[end]]
+
+  [[block page_scripts]]
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="js/search.js"></script><!--need to add a id = "vue-target" somewhere otherwise this will keep showing an error-->
+  [[end]]
 
 </html>
