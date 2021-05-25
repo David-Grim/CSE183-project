@@ -195,7 +195,33 @@ def song(song_id=None):
 @action.uses()
 def search():
     q = request.params.get("q")
-    results = [q]
+    results = []
+    
+    #search songs
+    song_rows = db(db.song.name <= q).select()
+    for song in song_rows:
+        results.append({
+            "name": song.name,
+            "url": URL('song/', song.id)
+        })
+        
+    #search albums
+    album_rows = db(db.album.name <= q).select()
+    for album in album_rows:
+        results.append({
+            "name": album.name,
+            "url": URL('album/', album.name)
+        })
+        
+    #search bands
+    band_rows = db(db.band.name <= q).select()
+    for band in band_rows:
+        results.append({
+            "name": band.name,
+            "url": URL('album/', band.name)
+        })
+        
+    #results = [q]
     #results = [q + ":" + str(uuid.uuid1()) for _ in range(random.randint(2, 6))]
     return dict(results = results)
 

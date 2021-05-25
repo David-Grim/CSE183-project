@@ -45,7 +45,14 @@
     <input class="input" type="text" v-model="query" @keyup="search" />
   </div>
 
-  <div v-for="r in results">{{r}}</div>
+  <div>
+    <div class="content has-background-white">
+    <div v-for="r in results">
+      <a class="has-text-black" v-bind:href="r.url">{{r.name}}</a>
+    </div>
+    </div>
+  </div>
+  
 </div>
 
 
