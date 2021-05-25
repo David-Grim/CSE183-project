@@ -194,11 +194,11 @@ def song(song_id=None):
 @action('search')
 @action.uses()
 def search():
-    q = request.params.get("q")
+    q = request.params.get("q").lower()
     results = []
     
     #search songs
-    song_rows = db(db.song.name <= q).select()
+    song_rows = db(db.song.name.lower() >= q).select()
     for song in song_rows:
         results.append({
             "name": song.name,
@@ -206,7 +206,7 @@ def search():
         })
         
     #search albums
-    album_rows = db(db.album.name <= q).select()
+    album_rows = db(db.album.name.lower() >= q).select()
     for album in album_rows:
         results.append({
             "name": album.name,
@@ -214,7 +214,7 @@ def search():
         })
         
     #search bands
-    band_rows = db(db.band.name <= q).select()
+    band_rows = db(db.band.name.lower() >= q).select()
     for band in band_rows:
         results.append({
             "name": band.name,
