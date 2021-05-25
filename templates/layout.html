@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+
+<!-- REFERENCES: -->
+<!-- https://stackoverflow.com/questions/18739937/how-to-keep-footer-at-bottom-of-screen -->
+<!-- https://www.sliderrevolution.com/resources/css-animated-background/ -->
+<!-- https://www.w3schools.com/howto/howto_css_glowing_text.asp -->
+
+
 <html>
   <head>
 
@@ -49,12 +56,41 @@ color:#fff;
     .dblack {
 }
 
+body2 {
+  width: 100%;
+  height:100%;
+}
+
+body2 {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#footer{
+ position:fixed;
+ bottom:0;
+ left:0;
+}
+
 
 
 </style>
 
   </head>
-
+<body2 id="footer">
 
   <body style="background-color:black;">
     <header class = "dblack" id="darkblack">
@@ -140,14 +176,15 @@ color:#fff;
       </main>
     </center>
     <!-- end of HTML inserted by extending template -->
-    <footer class = "dblack">
+    <footer class = "dblack" id="footer">
       <p class=" glow is-size-1">
         Made with py4web
       </p>
     </footer>
   </body>
-  <!-- You've gotta have utils.js -->
-  <script src="js/utils.js"></script>
+  
+ </body2>
+
 
   [[block page_scripts]]
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
