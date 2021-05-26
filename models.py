@@ -75,6 +75,7 @@ db.define_table(
     Field('user_id', type='reference auth_user'),
     Field('song_id', type='reference song'),
     Field('comment_id', type='reference comment'), #if comment is reply, point to target of reply. else empty
+    Field('top_level', type='boolean', default=True),
     Field('datetime', type='datetime', default=datetime.datetime.utcnow(), requires=IS_DATETIME()),
     Field('line_number', type='integer'),
     Field('post_text', requires=IS_NOT_EMPTY()),

@@ -89,30 +89,22 @@
               <span v-if="post.user_email == user_email" v-on:click="delete_post(post.id)" class="has-text-danger is-pulled-right">
                 <i class="fa fa-trash fa-fw"></i>
               </span>
-              
-              
-              
-              <!--reply button-->
+
+              <!--reply button and functionality-->
               <span v-else>
-                <span v-on:click="set_new_reply(post.id)" class="has-text-primary is-pulled-right">
-                  <i class="fa fa-reply fa-fw"></i>
-                </span>
-                
+                <button v-on:click="set_new_reply(post.id)" class="button is-primary is-size-5 is-pulled-right">
+                    <i class="fa fa-reply fa-fw"></i>
+                </button>
                 <div v-if="reply_id == post.id">
                     <div class="field">
-                        <textarea v-model="reply_text" class="textarea" placeholder="Type something!"></textarea>
+                        <textarea v-model="post_text" class="textarea" placeholder="Type something!"></textarea>
                     </div>
-                    <button v-on:click="add_post(); set_new_reply(-1)" class="button is-primary is-size-5">Post</button>
+                    <button v-on:click="add_post(post); set_new_reply(-1)" class="button is-primary is-size-5">Post</button>
                     <button v-on:click="reset_post(); set_new_reply(-1)" class="button is-warning is-size-5">Cancel</button>
                 </div>
               </span>
-                
-                
-                
-                
-                
+              
               <span class="has-text-info" v-on:mouseenter="set_hover_post(post.id)" v-on:mouseleave="set_hover_post(-1)">
-
                   <!--set thumbs up button functionality-->
                 <span>
                   <i v-on:click="set_post_thumbs(post.id, 0)"
