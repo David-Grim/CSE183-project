@@ -97,27 +97,21 @@ body {
 
 
 
-
-
 </style>
     
 
   </head>
   <html>
 
-  <body style="background-color:black;">
+  <body style="cursor: url(images/neon.cur),auto;">
+      
+
     <header class = "dblack" id="darkblack">
       <!-- Navigation bar -->
       <nav >
         <!-- Logo -->
         <a href="[[=URL('index')]]">
-          <b class = "is-size-1  glow">{nofilter} ♫
-          
-          <img src="images/vibe.gif"   width="150" height="150" />
-          <img src="images/music.gif"   width="150" height="150" />
-          <img src="images/notes.gif"   width="150" height="150" />
-          <img src="images/monophy.gif"   width="150" height="150" />
-          <img src="images/bars.gif"  width="150" height="150" />
+          <b class = "is-size-1  glow" @mouseover = "cursor: url(images/pink.cur),auto;">{nofilter}
           
           </b>
           
@@ -133,7 +127,9 @@ body {
           [[if globals().get('user'):]]
           <li>
             <a class="navbar-link is-primary is-size-5 has-text-black">
-              [[=globals().get('user',{}).get('email')]]
+              <!-- [[=globals().get('user',{}).get('email')]] -->
+              <img src="images/bars2.gif"   width="25" height="25" />
+              <img src="images/bars2.gif"   width="25" height="25" />
             </a>
             <ul>
               <!--<li><a href="[[=URL('auth/profile')]]">Edit Profile</a></li>-->
@@ -157,7 +153,7 @@ body {
         <div class="container">
           <div class="hero-head">
               <a class="is-size-4 glow">
-                Music discussion made simple.
+                ♪   Music discussion made simple.   ♫
               </a>
         </div>
   </div>
@@ -204,7 +200,7 @@ body {
     <!-- end of HTML inserted by extending template -->
     <footer class = "dblack" id="">
       <p class=" glow is-size-1">
-        Made with py4web
+        <img src="images/vibe.gif"   width="250" height="250" />
       </p>
     </footer>
   </body>
