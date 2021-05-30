@@ -198,7 +198,7 @@ def search():
     results = []
     
     #search songs
-    song_rows = db(db.song.name.lower() >= q).select()
+    song_rows = db(db.song.name.lower().like('%'+q+'%')).select()
     for song in song_rows:
         results.append({
             "name": song.name,
@@ -206,7 +206,7 @@ def search():
         })
         
     #search albums
-    album_rows = db(db.album.name.lower() >= q).select()
+    album_rows = db(db.album.name.lower().like('%'+q+'%')).select()
     for album in album_rows:
         results.append({
             "name": album.name,
@@ -214,11 +214,11 @@ def search():
         })
         
     #search bands
-    band_rows = db(db.band.name.lower() >= q).select()
+    band_rows = db(db.band.name.lower().like('%'+q+'%')).select()
     for band in band_rows:
         results.append({
             "name": band.name,
-            "url": URL('album/', band.name)
+            "url": URL('band/', band.name)
         })
         
     #results = [q]
