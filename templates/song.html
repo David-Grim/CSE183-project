@@ -107,9 +107,9 @@
               <span class="has-text-info" v-on:mouseenter="set_hover_post(post.id)" v-on:mouseleave="set_hover_post(-1)">
                   <!--set thumbs up button functionality-->
                 <span>
-                  <i v-on:click="set_post_thumbs(post.id, 0)"
+                  <i v-on:click="set_post_thumbs(post, 0)"
                   v-if="post_rating(post,1)" class="fa fa-flip-horizontal fa-thumbs-up"></i>
-                  <i v-on:click="set_post_thumbs(post.id, 1)"
+                  <i v-on:click="set_post_thumbs(post, 1)"
                   v-if="!post_rating(post,1)" class="fa fa-flip-horizontal fa-thumbs-o-up"></i>
                 </span>
 
@@ -136,15 +136,15 @@
         </div>
     </div>
   </div>
-  <div v-for="thread in posts" class="tile notification is-light is-child is-size-5">
-  <div class="container has-background-white">
+  <div v-for="thread in posts" class="is-size-5">
+  <div class="container">
   <h4>Comments</h4>
   <div id="vue-target">
-  <tree-menu 
+  <comment-tree
              :post="thread"
              :parent_post="null"
              :depth="0"   
-             ></tree-menu>
+             ></comment-tree>
   </div>
   </div>
   </div>
