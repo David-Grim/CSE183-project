@@ -268,7 +268,7 @@ def add_post():
     )
     post = db.comment[id].as_dict()
     configure_post(post)
-    print(post)
+    #print(post)
     return dict(post = post)
 
 @action('delete_post', method = "POST")

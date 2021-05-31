@@ -1,3 +1,5 @@
+const DEFAULT_SHOW_REPLIES_DEPTH = 2;
+
 // This will be the object that will contain the Vue attributes
 // and be used to initialize it.
 let app = {};
@@ -13,13 +15,13 @@ let init = (app) => {
         add_mode: false,
         reply_id: -1,
     };
-
+    /* comments now passed by reference due to recursive tree structure, so indexing them isn't as useful
     app.enumerate = (a) => {
         let k = 0;
         a.map((e) => {e._idx = k++;});
         return a;
     };
-
+    */
     app.set_hover_post = (comment=null) => {
         if(comment) { app.vue.hover_post = comment.id; }
         else app.vue.hover_post = -1;
@@ -82,8 +84,8 @@ let init = (app) => {
             let post = response.data.post;
             app.format_post_thumbs(post);
             post.posts = [];
-            if (reply_target === null) { app.vue.posts = app.enumerate([response.data.post,...app.vue.posts]);
-            } else reply_target.posts = app.enumerate([response.data.post,...reply_target.posts]);
+            if (reply_target === null) { app.vue.posts = [response.data.post,...app.vue.posts];
+            } else reply_target.posts = [response.data.post,...reply_target.posts];
             app.reset_post();
         });
    };
@@ -164,66 +166,21 @@ let init = (app) => {
     };
 
     app.CommentComponent = {
-        template: `
-        <div class="tile notification is-light is-child is-size-5"> 
-            <div> {{comment.post_text}} </div>
-            <div class="is-size-5 has-text-grey"> {{comment.author}} </div>
-            <div class="is-size-3">
-                <span v-if="comment.user_email == user_email" v-on:click="delete_post()" class="has-text-danger is-pulled-right">
-                    <i class="fa fa-trash fa-fw"></i>
-                </span>
-                
-                <span v-else>
-                    <button v-on:click="replying=true" class="button is-primary is-size-10 is-pulled-right">
-                        <i class="fa fa-reply fa-fw"></i>
-                    </button>
-                    <div v-if="replying">
-                        <div class="field">
-                            <textarea v-model="input_text" class="textarea" placeholder="Type something!"></textarea>
-                        </div>
-                        <button v-on:click="add_post()" class="button is-primary is-size-5">Post</button>
-                        <button v-on:click="replying = false" class="button is-warning is-size-5">Cancel</button>
-                    </div>
-                </span>
-
-                <span class="has-text-info" v-on:mouseover="mouse_hover=true;">
-                <span v-on:mouseleave="mouse_hover=false;">
-                    <span>
-                        <i v-on:click="set_post_thumbs(comment, 0);"
-                           v-if="post_rating(comment,1)" class="fa fa-flip-horizontal fa-thumbs-up"></i>
-                        <i v-on:click="set_post_thumbs(comment, 1);"
-                           v-if="!post_rating(comment,1)" class="fa fa-flip-horizontal fa-thumbs-o-up"></i>
-                    </span>
-
-                    <span>
-                        <i v-on:click="set_post_thumbs(comment,0);" v-if="post_rating(comment,-1)"
-                           class="fa fa-thumbs-down"></i>
-                        <i v-on:click="set_post_thumbs(comment,-1);" v-if="!post_rating(comment,-1)"
-                           class="fa fa-thumbs-o-down"></i>
-                    </span>
-                    
-                    <span v-if="mouse_hover" class="has-text-info">
-                        <span v-if="comment.likes.length > 0" class="is-size-6">
-                          Liked by:<span v-for="like in comment.likes"> {{like.name}}<span v-if="comment.likes.length > 1">,</span></span>
-                        </span>
-                        <span v-if="comment.dislikes.length > 0" class="is-size-6">
-                          Disliked by:<span v-for="dislike in comment.dislikes"> {{dislike.name}}<span v-if="comment.dislikes.length > 1">,</span></span>
-                        </span>
-                    </span>
-                    <i v-if="rerender"></i><i v-if="!rerender"></i>
-                </span>
-                </span>
-            </div>
-        </div>
-        `,
-        props: [ 'comment', 'parent_comment' ],
+        template: '#comment-template',
+        props: [ 'comment', 'parent_comment', 'depth' ],
         data() { return { 
             user_email: app.vue.user_email,
             replying: false,
             input_text: "",
             mouse_hover: false,
-            rerender: false
+            rerender: false,
+            showChildren: (this.depth < DEFAULT_SHOW_REPLIES_DEPTH)
         }},
+        computed: {
+            indent() {
+            return { transform: `translate(${this.depth * 50}px)` };
+            }
+        },
         methods: {
             delete_post() { app.delete_post(this.comment.id, this.parent_comment); },
             add_post() {
@@ -238,49 +195,10 @@ let init = (app) => {
             forceRerender() {
                 this.rerender = !this.rerender;
             },
-            
-        },
-    };
-    
-    app.CommentTreeComponent = {
-        template: `
-            <div class="comment-tree">
-                <div :style="indent">  
-                        
-                    <comment 
-                    :comment="post"
-                    :parent_comment="parent_post"
-                    ></comment>
-                    
-                    <div v-if="post.posts.length && !showChildren" @click="toggleChildren">Show Replies</div>
-                    <div v-else @click="toggleChildren">Hide Replies</div>
-                </div>
-            <comment-tree
-            v-if="showChildren"
-            v-for="reply in post.posts" 
-            :key="reply.id"
-
-            :post="reply"
-            :parent_post="post"
-            :depth="depth + 1"   
-            ></comment-tree>
-            </div>
-        `,
-        props: [ 'post', 'parent_post', 'depth' ],
-        data() {
-            return {
-            showChildren: (this.depth < 2)
-            };
-        },
-        computed: {
-            indent() {
-            return { transform: `translate(${this.depth * 50}px)` };
-            }
-        },
-        methods: {
             toggleChildren() {
-            this.showChildren = !this.showChildren;
-            }
+                this.showChildren = !this.showChildren;
+            },
+            
         },
     };
 
@@ -290,15 +208,14 @@ let init = (app) => {
         data: app.data,
         methods: app.methods,
         components: {
-            'comment': app.CommentComponent,
-            'comment-tree': app.CommentTreeComponent
+            'comment': app.CommentComponent
         }
     });
 
     // And this initializes it.
     app.init = () => {
         axios.get(load_posts_url, {params: {"song_id": song_id}}).then((result) => {
-            app.vue.posts = app.enumerate(result.data.posts);
+            app.vue.posts = result.data.posts;
             app.vue.posts.forEach(function (post) {
                 app.format_reply_tree(post);
             });
@@ -311,4 +228,3 @@ let init = (app) => {
 
 init(app);
 Vue.component('comment', app.CommentComponent);
-Vue.component('comment-tree', app.CommentTreeComponent);
