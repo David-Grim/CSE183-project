@@ -52,7 +52,7 @@
       </p>
   </div>
 </section>
-</body>
+
 
 
 <div class = "column" id="vue-target">
@@ -82,76 +82,24 @@
     <!--set the posts to display with text, the posts author and the thumbs up and down buttons-->
   <div class="section">
     <div class="tile is-ancestor is-vertical">
-        <div v-for="post in posts" class="tile notification is-light is-child is-size-5">
-            <div>{{post.post_text}}</div>
-            <div class="is-size-5 has-text-grey">{{post.author}}</div>
-            <div class="is-size-3">
-              <span v-if="post.user_email == user_email" v-on:click="delete_post(post.id)" class="has-text-danger is-pulled-right">
-                <i class="fa fa-trash fa-fw"></i>
-              </span>
-
-              <!--reply button and functionality-->
-              <span v-else>
-                <button v-on:click="set_new_reply(post.id)" class="button is-primary is-size-5 is-pulled-right">
-                    <i class="fa fa-reply fa-fw"></i>
-                </button>
-                <div v-if="reply_id == post.id">
-                    <div class="field">
-                        <textarea v-model="post_text" class="textarea" placeholder="Type something!"></textarea>
-                    </div>
-                    <button v-on:click="add_post(post); set_new_reply(-1)" class="button is-primary is-size-5">Post</button>
-                    <button v-on:click="reset_post(); set_new_reply(-1)" class="button is-warning is-size-5">Cancel</button>
+        <div v-for="thread in posts" class="is-size-5">
+            <div class="container">
+                <div id="vue-target">
+                    <comment-tree
+                     :post="thread"
+                     :parent_post="null"
+                     :depth="0"   
+                     ></comment-tree>
                 </div>
-              </span>
-              
-              <span class="has-text-info" v-on:mouseenter="set_hover_post(post.id)" v-on:mouseleave="set_hover_post(-1)">
-                  <!--set thumbs up button functionality-->
-                <span>
-                  <i v-on:click="set_post_thumbs(post, 0)"
-                  v-if="post_rating(post,1)" class="fa fa-flip-horizontal fa-thumbs-up"></i>
-                  <i v-on:click="set_post_thumbs(post, 1)"
-                  v-if="!post_rating(post,1)" class="fa fa-flip-horizontal fa-thumbs-o-up"></i>
-                </span>
-
-                  <!--set thumbs down button functionality-->
-                <span>
-                  <i v-on:click="set_post_thumbs(post.id,0)" v-if="post_rating(post,-1)"
-                  class="fa fa-thumbs-down"></i>
-                  <i v-on:click="set_post_thumbs(post.id,-1)" v-if="!post_rating(post,-1)"
-                  class="fa fa-thumbs-o-down"></i>
-                </span>
-              </span>
-
-                <!--set the likers and dislikers to display when mouse is hovered over buttons-->
-              <span v-if="hover_post == post.id" class="has-text-info">
-                <span v-if="post.likes.length > 0" class="is-size-6">
-                  Liked by:<span v-for="like in post.likes"> {{like.name}}<span v-if="post.likes.length > 1">,</span></span>
-                </span>
-                <span v-if="post.dislikes.length > 0" class="is-size-6">
-                  Disliked by:<span v-for="dislike in post.dislikes"> {{dislike.name}}<span v-if="post.dislikes.length > 1">,</span></span>
-                </span>
-
-              </span>
             </div>
         </div>
     </div>
   </div>
-  <div v-for="thread in posts" class="is-size-5">
-  <div class="container">
-  <h4>Comments</h4>
-  <div id="vue-target">
-  <comment-tree
-             :post="thread"
-             :parent_post="null"
-             :depth="0"   
-             ></comment-tree>
-  </div>
-  </div>
-  </div>
+  
 
   
 </div>
-
+</body>
 
 
 

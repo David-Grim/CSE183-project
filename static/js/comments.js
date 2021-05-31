@@ -252,7 +252,8 @@ let init = (app) => {
                     :parent_comment="parent_post"
                     ></comment>
                     
-                    <div v-if="post.posts.length" class="show_replies" @click="toggleChildren">Show Replies</div>
+                    <div v-if="post.posts.length && !showChildren" @click="toggleChildren">Show Replies</div>
+                    <div v-else @click="toggleChildren">Hide Replies</div>
                 </div>
             <comment-tree
             v-if="showChildren"
@@ -268,12 +269,12 @@ let init = (app) => {
         props: [ 'post', 'parent_post', 'depth' ],
         data() {
             return {
-            showChildren: false
-            }
+            showChildren: (this.depth < 2)
+            };
         },
         computed: {
             indent() {
-            return { transform: `translate(${this.depth * 50}px)` }
+            return { transform: `translate(${this.depth * 50}px)` };
             }
         },
         methods: {
