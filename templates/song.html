@@ -52,7 +52,7 @@
       </p>
   </div>
 </section>
-</body>
+
 
 
 <div class = "column" id="vue-target">
@@ -82,50 +82,93 @@
     <!--set the posts to display with text, the posts author and the thumbs up and down buttons-->
   <div class="section">
     <div class="tile is-ancestor is-vertical">
-        <div v-for="post in posts" class="tile notification is-light is-child is-size-5">
-            <div>{{post.post_text}}</div>
-            <div class="is-size-5 has-text-grey">{{post.author}}</div>
-            <div class="is-size-3">
-              <span v-on:click="delete_post(post.id)" v-if="post.user_email == user_email" class="has-text-danger is-pulled-right">
-                <i class="fa fa-trash fa-fw"></i>
-              </span>
-              <span class="has-text-info" v-on:mouseenter="set_hover_post(post.id)" v-on:mouseleave="set_hover_post(-1)">
-
-                  <!--set thumbs up button functionality-->
-                <span>
-                  <i v-on:click="set_post_thumbs(post.id, 0)"
-                  v-if="post_rating(post,1)" class="fa fa-flip-horizontal fa-thumbs-up"></i>
-                  <i v-on:click="set_post_thumbs(post.id, 1)"
-                  v-if="!post_rating(post,1)" class="fa fa-flip-horizontal fa-thumbs-o-up"></i>
-                </span>
-
-                  <!--set thumbs down button functionality-->
-                <span>
-                  <i v-on:click="set_post_thumbs(post.id,0)" v-if="post_rating(post,-1)"
-                  class="fa fa-thumbs-down"></i>
-                  <i v-on:click="set_post_thumbs(post.id,-1)" v-if="!post_rating(post,-1)"
-                  class="fa fa-thumbs-o-down"></i>
-                </span>
-              </span>
-
-                <!--set the likers and dislikers to display when mouse is hovered over buttons-->
-              <span v-if="hover_post == post.id" class="has-text-info">
-                <span v-if="post.likes.length > 0" class="is-size-6">
-                  Liked by:<span v-for="like in post.likes"> {{like.name}}<span v-if="post.likes.length > 1">,</span></span>
-                </span>
-                <span v-if="post.dislikes.length > 0" class="is-size-6">
-                  Disliked by:<span v-for="dislike in post.dislikes"> {{dislike.name}}<span v-if="post.dislikes.length > 1">,</span></span>
-                </span>
-
-              </span>
+        <div v-for="thread in posts" class="is-size-5">
+            <div class="container">
+                <div id="vue-target">
+                    <comment
+                     :comment="thread"
+                     :parent_comment="null"
+                     :depth="0"   
+                     ></comment>
+                </div>
             </div>
         </div>
     </div>
   </div>
-</div>
+  
 
+  
+</div>
+</body>
 
 [[block page_scripts]]
+<script type="text/x-template" id="comment-template">
+    <div class="comment">
+        <div :style="indent">  
+            <div class="tile notification is-light is-child is-size-5"> 
+                <div> {{comment.post_text}} </div>
+                <div class="is-size-5 has-text-grey"> {{comment.author}} </div>
+                <div class="is-size-3">
+                    <span v-if="comment.user_email == user_email" v-on:click="delete_post()" class="has-text-danger is-pulled-right">
+                        <i class="fa fa-trash fa-fw"></i>
+                    </span>
+                    
+                    <span v-else>
+                        <button v-on:click="replying=true" class="button is-primary is-size-10 is-pulled-right">
+                            <i class="fa fa-reply fa-fw"></i>
+                        </button>
+                        <div v-if="replying">
+                            <div class="field">
+                                <textarea v-model="input_text" class="textarea" placeholder="Type something!"></textarea>
+                            </div>
+                            <button v-on:click="add_post()" class="button is-primary is-size-5">Post</button>
+                            <button v-on:click="replying = false" class="button is-warning is-size-5">Cancel</button>
+                        </div>
+                    </span>
+
+                    <span class="has-text-info" v-on:mouseover="mouse_hover=true;">
+                    <span v-on:mouseleave="mouse_hover=false;">
+                        <span>
+                            <i v-on:click="set_post_thumbs(comment, 0);"
+                            v-if="post_rating(comment,1)" class="fa fa-flip-horizontal fa-thumbs-up"></i>
+                            <i v-on:click="set_post_thumbs(comment, 1);"
+                            v-if="!post_rating(comment,1)" class="fa fa-flip-horizontal fa-thumbs-o-up"></i>
+                        </span>
+
+                        <span>
+                            <i v-on:click="set_post_thumbs(comment,0);" v-if="post_rating(comment,-1)"
+                            class="fa fa-thumbs-down"></i>
+                            <i v-on:click="set_post_thumbs(comment,-1);" v-if="!post_rating(comment,-1)"
+                            class="fa fa-thumbs-o-down"></i>
+                        </span>
+                        
+                        <span v-if="mouse_hover" class="has-text-info">
+                            <span v-if="comment.likes.length > 0" class="is-size-6">
+                            Liked by:<span v-for="like in comment.likes"> {{like.name}}<span v-if="comment.likes.length > 1">,</span></span>
+                            </span>
+                            <span v-if="comment.dislikes.length > 0" class="is-size-6">
+                            Disliked by:<span v-for="dislike in comment.dislikes"> {{dislike.name}}<span v-if="comment.dislikes.length > 1">,</span></span>
+                            </span>
+                        </span>
+                        <i v-if="rerender"></i><i v-if="!rerender"></i>
+                    </span>
+                    </span>
+                </div>
+            </div>
+        <div v-if="comment.posts.length && !showChildren" @click="toggleChildren">Show Replies</div>
+        <div v-else @click="toggleChildren">Hide Replies</div>
+        </div>
+        <comment
+            v-if="showChildren"
+            v-for="reply in comment.posts" 
+            :key="reply.id"
+
+            :comment="reply"
+            :parent_comment="comment"
+            :depth="depth + 1"   
+            ></comment>
+    </div>
+</script>
 <script>
   let load_posts_url = "[[=XML(load_posts_url)]]";
   let add_post_url = "[[=XML(add_post_url)]]";

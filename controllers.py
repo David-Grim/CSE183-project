@@ -29,7 +29,7 @@ from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash, Field
 from py4web.utils.url_signer import URLSigner
-from .models import get_user_email, get_time
+from .models import get_user_email, get_user_id, get_time
 from py4web.utils.form import Form, FormStyleBulma
 from pydal.validators import *
 
@@ -228,30 +228,47 @@ def search():
 
 #--Code just for the comments section-----------
 
+
+    
+
 @action('load_posts')
 @action.uses(url_signer.verify(), db)
 def load_posts():
     song_id = id = request.params.get('song_id')
+    #print(song_id)
     conf_post = []
-    posts = db(db.comment.song_id == song_id).select(db.comment.id, orderby=~db.comment.datetime).as_list()
+    posts = db((db.comment.song_id == song_id) & 
+               (db.comment.top_level == 'true')).select(orderby=~db.comment.datetime).as_list()
     for post in posts:
-        conf_post.append(configure_post(post["id"]))
-    return dict(posts = conf_post)
-
+        configure_post(post)
+        load_replies(post)
+    #print(posts)
+    return dict(posts = posts)
 
 @action('add_post', method = "POST")
 @action.uses(url_signer.verify(), db)
 def add_post():
     text = request.json.get('post_text')
     song_id = request.json.get('song_id')
+    reply_id = request.json.get('reply_id')
+    reply_target = db(db.comment.id == reply_id).select().first()
+    comment_id = None
+    top_level = True
+    if reply_target is not None:
+        comment_id = reply_target.id
+        top_level = False
     id = db.comment.insert(
         song_id = song_id,
+        comment_id = comment_id,
+        top_level = top_level,
         post_text = text,
         user_email = get_user_email(),
-        datetime = get_time(),
+        user_id = get_user_id(),
+        datetime = get_time()
     )
-    post = db.comment[id]
-    post = configure_post(post.id)
+    post = db.comment[id].as_dict()
+    configure_post(post)
+    #print(post)
     return dict(post = post)
 
 @action('delete_post', method = "POST")
@@ -271,29 +288,35 @@ def post_thumbs():
     rating = request.json.get('rating')
     user_email = auth.current_user.get("email")
 
-
     db.thumbs.update_or_insert(
         (comment_id == db.thumbs.comment_id )&(user_email == db.thumbs.user_email),
         rating = rating,
         comment_id = comment_id,
         user_email = user_email,
     )
-
-    post = configure_post(comment_id)
+    post = db.comment[comment_id].as_dict()
+    configure_post(post)
     return dict(post = post)
+    
 
-
-def configure_post(post_id):
-    thumbs = db(db.thumbs.comment_id == post_id).select().as_list()
+def configure_post(post):
+    thumbs = db(db.thumbs.comment_id == post['id']).select().as_list()
     for thumb in thumbs:
         user = db(db.auth_user.email == thumb["user_email"]).select().first()
         name = user.first_name + " " + user.last_name if user is not None else "Unknown"
         thumb["name"] = name
-    user = db(db.auth_user.email == db.comment[post_id].user_email).select().first()
+    user = db(db.auth_user.id == post['user_id']).select().first()
     author = user.first_name + " " + user.last_name if user is not None else "Unknown"
-    post = db.comment[post_id].as_dict()
     post["author"] = author
     post["thumbs"] = thumbs
-    return post
+    
+def load_replies(post):
+    replies = db(db.comment.comment_id == post['id']).select(orderby=~db.comment.datetime).as_list()
+    post['posts'] = []
+    for reply in replies:
+        post['posts'].append(reply)
+        configure_post(reply)
+        load_replies(reply)
+        
 
 
