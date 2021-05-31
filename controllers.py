@@ -50,7 +50,7 @@ def index():
 @action("lyrics")
 @action.uses(db, auth.user,"lyrics.html")
 def lyrics():
-    bands = db(db.band.name).select()
+    bands = db(db.band.name).select(orderby=db.band.name)
     songs = db(db.song.name).select()
     return dict(bands = bands,
                 songs = songs,
