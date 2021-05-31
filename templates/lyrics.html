@@ -31,11 +31,11 @@
 <section class="hero is full has-text-black">
   <div class="hero-body">
     <p class="title has-text-black">
-      Search for music lyrics.
+      Search for music lyrics, or browse our catalog of bands.
     </p>
       <p>
-          You should be able to search for bands/albums/songs here, or better yet in the header from any page.
-          But until then I'm putting a table with all the bands in the DB here for testing purposes.
+          If we don't have the music you're looking for you can always upload the lyrics yourself, or find a new song to explore!
+          Our catalog grows everyday with help from users like you.
       </p>
   </div>
 </section>
@@ -56,20 +56,22 @@
 </div>
 
 
+<div class = "title has-text-black">Catalog of Bands </div>
+<div class="button is-primary" href="[[=URL('add_band')]]">Add New Band</div>
+</br>
+</br>
+
 
 <table>
-    <tr>
-        <th class = "title has-text-black">Bands</th>
-    </tr>
-    <td></td>
+
     [[for band in bands:]]
+
     <tr>
         <td class = "is-size-5 has-text-black"><a href="[[=URL('band', band.name)]]">[[=band.name]]</a></td>
     </tr>
     [[pass]]
     
 </table>
-<a class="button is-primary" href="[[=URL('add_band')]]">Add Band</a>
 </body>
 
 

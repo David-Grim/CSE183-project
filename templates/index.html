@@ -17,17 +17,13 @@
       </p>
   </div>
 </section>
+<div class ="title has-text-black">Newly added lyrics</div>
 <table>
-            <tr>
-                <th class ="title has-text-black">Newly added lyrics</th>
-            </tr>
-            <tr></tr>
             [[for song in songs[:10]:]]
-
             <tr>
-
-
-            <td class = "is-size-5"><a href="[[=URL('song', song.id)]]">[[=song.name]]</a></td>
+                <td class = "is-size-5">
+                    <a href="[[=URL('song', song.id)]]">[[=song.name]]</a>
+                </td>
                 <!--<td><a>[[=song.band_id]]</a></td>-->
             </tr>
             [[pass]]
