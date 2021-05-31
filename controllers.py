@@ -69,7 +69,8 @@ def profile():
     profile = db(db.profile.user_id == user["id"]).select().first()
     comments = db(db.comment.user_email == get_user_email()).select()
     return dict(user=user, profile=profile, comments = comments)
-    
+
+
 @action("edit_profile", method=["GET", "POST"])
 @action.uses(db, session, auth.user, "form.html")
 def edit_profile():
@@ -88,6 +89,7 @@ def edit_profile():
         redirect(URL('profile'))
     return dict(profile=profile, form=form)
 
+
 @action('add_band', method=["GET", "POST"])
 @action.uses(db, session, auth.user, 'form.html')
 def add_band():
@@ -95,7 +97,9 @@ def add_band():
     if form.accepted:
         redirect(URL('lyrics'))
     return dict(form=form)
-    
+
+
+
 #info pages use band/ablum/song names in URL for easy access
 @action('band/<band_name>')
 @action.uses(db, auth.user, 'band.html')
