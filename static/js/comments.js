@@ -1,57 +1,3 @@
-let tree = {
-  label: 'root',
-  nodes: [
-    {
-      label: 'item1',
-      nodes: [
-        {
-          label: 'item1.1'
-        },
-        {
-          label: 'item1.2',
-          nodes: [
-            {
-              label: 'item1.2.1'
-            }
-          ]
-        }
-      ]
-    }, 
-    {
-      label: 'item2'  
-    }
-  ]
-}
-
-Vue.component('tree-menu', { 
-  template: '#tree-menu',
-  props: [ 'nodes', 'label', 'depth' ],
-  data() {
-     return {
-       showChildren: false
-     }
-  },
-  computed: {
-    iconClasses() {
-      return {
-        'fa-plus-square-o': !this.showChildren,
-        'fa-minus-square-o': this.showChildren
-      }
-    },
-    labelClasses() {
-      return { 'has-children': this.nodes }
-    },
-    indent() {
-      return { transform: `translate(${this.depth * 50}px)` }
-    }
-  },
-  methods: {
-    toggleChildren() {
-       this.showChildren = !this.showChildren;
-    }
-  }
-});
-
 // This will be the object that will contain the Vue attributes
 // and be used to initialize it.
 let app = {};
@@ -59,7 +5,6 @@ let app = {};
 // Given an empty app object, initializes it filling its attributes,
 // creates a Vue instance, and then initializes the Vue instance.
 let init = (app) => {
-
     app.data = {
         user_email: user_email,
         posts: [],
@@ -67,7 +12,6 @@ let init = (app) => {
         post_text: "",
         add_mode: false,
         reply_id: -1,
-        tree
     };
 
     app.enumerate = (a) => {
@@ -120,19 +64,20 @@ let init = (app) => {
       }
    };
 
-    app.add_post = (reply_target=null) => {
+    app.add_post = (reply_target=null, post_text = app.vue.post_text) => {
          reply_id = -1; //remains -1 if post is not a reply
          if (reply_target !== null) reply_id = reply_target.id;
          axios.post(add_post_url,
          {
-            song_id:song_id,
-            reply_id:reply_id,
-            post_text:app.vue.post_text
+            song_id: song_id,
+            reply_id: reply_id,
+            post_text: post_text
 
          }).then((response) => {
             let post = app.format_post_thumbs(response.data.post);
+            post.posts = [];
             if (reply_target === null) { app.vue.posts = app.enumerate([response.data.post,...app.vue.posts]);
-            } else reply_target.replies = app.enumerate([response.data.post,...reply_target.replies]);
+            } else reply_target.posts = app.enumerate([response.data.post,...reply_target.posts]);
             app.reset_post();
          });
    };
@@ -151,13 +96,16 @@ let init = (app) => {
          });
    };
 
-   app.delete_post = (comment_id) => {
+   app.delete_post = (comment_id, parent=null) => {
      axios.post(delete_post_url,
          {
             comment_id,
-
+            
          }).then(() => {
-            app.vue.posts = app.vue.posts.filter((post) => post.id != comment_id);
+             if(parent!==null) { parent.posts = parent.posts.filter((post) => post.id != comment_id); }
+             else { app.vue.posts = app.vue.posts.filter((post) => post.id != comment_id); }
+             
+             
          });
   };
 
@@ -184,13 +132,111 @@ let init = (app) => {
         set_new_reply: app.set_new_reply,
     };
 
+/*
+    app.components - {
+        'test_component': {
+            template: `
+                <div> {{ comment.post_txt }}
+            </div>
+            `,
+            props: [ 'comment' ],
+            data() { return {} },
+        }
+};*/
 
+    app.CommentComponent = {
+            template: `
+            
+            <div> {{ comment.post_text }}
+            <span v-if="comment.user_email == user_email" v-on:click="delete_post()" class="has-text-danger is-pulled-right">
+                <i class="fa fa-trash fa-fw"></i>
+              </span>
+            
+            
+            <span v-else>
+                <button v-on:click="replying=true" class="button is-primary is-size-5 is-pulled-right">
+                    <i class="fa fa-reply fa-fw"></i>
+                </button>
+                <div v-if="replying">
+                    <div class="field">
+                        <textarea v-model="input_text" class="textarea" placeholder="Type something!"></textarea>
+                    </div>
+                    <button v-on:click="add_post()" class="button is-primary is-size-5">Post</button>
+                    <button v-on:click="replying = false" class="button is-warning is-size-5">Cancel</button>
+                </div>
+              </span>
+              </div>
+            `,
+        props: [ 'comment', 'parent_comment' ],
+        data() { return { 
+            user_email: app.vue.user_email,
+            replying: false,
+            input_text: ""
+        }},
+        methods: {
+            delete_post() {
+                app.delete_post(this.comment.id, this.parent_comment);
+            },
+            add_post() {
+                app.add_post(this.comment, this.input_text);
+                this.input_text = "";
+                this.replying=false;
+            },
+        },
+    };
+    
+    app.CommentTreeComponent = {
+                template: `
+    <div class="tree-menu has-background-white">
+    <div class="show_replies" @click="toggleChildren">
+      <div :style="indent">  
+        
+        <comment 
+        :comment="post"
+        :parent_comment="parent_post"
+        ></comment>
+        
+        <div v-if="post.posts.length" class="fa">Show Replies</div>
+      </div>
+    </div>
+    <tree-menu 
+      v-if="showChildren"
+      v-for="reply in post.posts" 
+
+      :post="reply"
+      :parent_post="post"
+      :depth="depth + 1"   
+    >
+    </tree-menu>
+  </div>
+  `,
+  props: [ 'post', 'parent_post', 'depth' ],
+  data() {
+     return {
+       showChildren: false
+     }
+  },
+  computed: {
+    indent() {
+      return { transform: `translate(${this.depth * 50}px)` }
+    }
+  },
+  methods: {
+    toggleChildren() {
+       this.showChildren = !this.showChildren;
+    }
+  },
+    };
 
     // This creates the Vue instance.
     app.vue = new Vue({
         el: "#vue-target",
         data: app.data,
-        methods: app.methods
+        methods: app.methods,
+        components: {
+            'comment': app.CommentComponent,
+            'tree-menu': app.CommentTreeComponent
+        }
     });
 
     // And this initializes it.
@@ -206,3 +252,5 @@ let init = (app) => {
 };
 
 init(app);
+Vue.component('comment', app.CommentComponent);
+Vue.component('tree-menu', app.CommentTreeComponent);
