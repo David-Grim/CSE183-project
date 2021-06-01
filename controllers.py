@@ -91,7 +91,7 @@ def edit_profile():
 
 
 @action('add_band', method=["GET", "POST"])
-@action.uses(db, session, auth.user, 'form.html')
+@action.uses(db, session, auth.user, 'band_form.html')
 def add_band():
     form = Form(db.band, csrf_session=session, formstyle=FormStyleBulma)
     if form.accepted:
@@ -100,7 +100,7 @@ def add_band():
 
 
 
-#info pages use band/ablum/song names in URL for easy access
+#info pages use band/album/song names in URL for easy access
 @action('band/<band_name>')
 @action.uses(db, auth.user, 'band.html')
 def band(band_name=None):
@@ -116,7 +116,7 @@ def band(band_name=None):
 
 #form pages use relevant IDs in url for precision
 @action('add_album/<band_id:int>', method=["GET", "POST"])
-@action.uses(db, session, auth.user, 'form.html')
+@action.uses(db, session, auth.user, 'album_form.html')
 def add_album(band_id=None):
     assert band_id is not None
     form = Form([
@@ -148,7 +148,7 @@ def album(album_name=None):
     #return dict()
     
 @action('add_song/<band_id:int>/<album_id:int>', method=["GET", "POST"])
-@action.uses(db, session, auth.user, 'form.html')
+@action.uses(db, session, auth.user, 'song_form.html')
 def add_song(band_id=None, album_id=None):
     assert band_id is not None
     assert album_id is not None
