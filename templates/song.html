@@ -44,6 +44,7 @@
                             <lyric-line
                                 line_text="[[=line]]"
                                 :comment_arr="annotations[ [[=i]] ]"
+                                :line_number="[[=i]]"
                                 ></lyric-line>
                         [[pass]]
                     </div>
@@ -179,7 +180,27 @@
             <a v-on:click="toggle_annotations()" class="lyrics is-size-5 has-text-black">{{line_text}}</a>
             </div>
             <div v-if="showing_annotations">
-            <br>
+            
+            
+            <div class="section">
+                <!--Section for showing the form to write a post-->
+                <div v-if="commenting">
+                    <div class="field">
+                        <textarea v-model="input_text" class="textarea" placeholder="Type something!"></textarea>
+                    </div>
+                    <button v-on:click="add_post()" class="button is-primary is-size-5">Post</button>
+                    <button v-on:click="commenting=false" class="button is-warning is-size-5">Cancel</button>
+                </div>
+
+                <!--Section for when the form shouldn't be on the screen-->
+                <div v-if="!commenting">
+                    <button v-on:click="commenting=true" class="button is-primary is-size-5">
+                        <i class="fa fa-plus fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+            
+            
             <div v-for="thread in comment_arr" class="is-size-5">
             <div class="container">
             <comment

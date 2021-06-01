@@ -262,6 +262,7 @@ def add_post():
     text = request.json.get('post_text')
     song_id = request.json.get('song_id')
     reply_id = request.json.get('reply_id')
+    line_number = request.json.get('line_number')
     reply_target = db(db.comment.id == reply_id).select().first()
     comment_id = None
     top_level = True
@@ -275,7 +276,8 @@ def add_post():
         post_text = text,
         user_email = get_user_email(),
         user_id = get_user_id(),
-        datetime = get_time()
+        datetime = get_time(),
+        line_number = line_number
     )
     post = db.comment[id].as_dict()
     configure_post(post)

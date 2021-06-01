@@ -17,11 +17,6 @@ let init = (app) => {
         add_mode: false,
         reply_id: -1,
     };
-    app.enumerate = (a) => {
-        let k = 0;
-        a.map((e) => {e._idx = k++;});
-        return a;
-    };
     app.set_hover_post = (comment=null) => {
         if(comment) { app.vue.hover_post = comment.id; }
         else app.vue.hover_post = -1;
@@ -71,21 +66,24 @@ let init = (app) => {
     }
    };
 
-    app.add_post = (reply_target=null, post_text = app.vue.post_text) => {
+    app.add_post = (reply_target=null, post_text = app.vue.post_text, line_number=-1) => {
         reply_id = -1; //remains -1 if post is not a reply
         if (reply_target !== null) reply_id = reply_target.id;
         axios.post(add_post_url,
         {
             song_id: song_id,
             reply_id: reply_id,
-            post_text: post_text
+            post_text: post_text,
+            line_number: line_number
 
         }).then((response) => {
             let post = response.data.post;
             app.format_post_thumbs(post);
             post.posts = [];
-            if (reply_target === null) { app.vue.posts = [response.data.post,...app.vue.posts];
-            } else reply_target.posts = [response.data.post,...reply_target.posts];
+            if (reply_target === null) {
+                if(post.line_number == -1) app.vue.posts = [post,...app.vue.posts];
+                else app.vue.annotations[post.line_number] = [post,...app.vue.annotations[post.line_number]];
+            } else reply_target.posts = [post,...reply_target.posts];
             app.reset_post();
         });
    };
@@ -154,7 +152,6 @@ let init = (app) => {
     };
     
     app.methods = {
-        enumerate: app.enumerate,
         reset_post: app.reset_post,
         set_hover_post: app.set_hover_post,
         add_post: app.add_post,
@@ -207,7 +204,8 @@ let init = (app) => {
         template: '#lyric-line-template',
         props: {
             line_text: String,
-            comment_arr: Array
+            comment_arr: Array,
+            line_number: Number
         },
         data() { return { 
             showing_annotations: false,
@@ -223,7 +221,8 @@ let init = (app) => {
                 else return false;
             },
             add_post() {
-                app.add_post(null, this.input_text);
+                app.add_post(null, this.input_text, this.line_number);
+                this.comment_arr = app.vue.annotations[this.line_number];
                 this.input_text = "";
                 this.commenting=false;
             },
@@ -245,7 +244,6 @@ let init = (app) => {
     // And this initializes it.
     app.init = () => {
         axios.get(load_posts_url, {params: {"song_id": song_id}}).then((result) => {
-            //app.vue.lyrics = app.enumerate(result.data.lyric_lines);
             app.vue.annotations = result.data.posts;
             app.vue.annotations.forEach(function (posts) {
                 posts.forEach(function (post) {
