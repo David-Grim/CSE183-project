@@ -81,9 +81,10 @@ let init = (app) => {
             app.format_post_thumbs(post);
             post.posts = [];
             if (reply_target === null) {
-                if(post.line_number == -1) app.vue.posts = [post,...app.vue.posts];
-                else app.vue.annotations[post.line_number] = [post,...app.vue.annotations[post.line_number]];
-            } else reply_target.posts = [post,...reply_target.posts];
+                if(post.line_number == -1) app.vue.posts.unshift(post);
+                else app.vue.annotations[post.line_number].unshift(post);
+                //else app.vue.annotations[post.line_number] = [post,...app.vue.annotations[post.line_number]];
+            } else reply_target.posts.unshift(post);
             app.reset_post();
         });
    };
@@ -188,7 +189,9 @@ let init = (app) => {
             },
             set_hover_post(comment) { app.set_hover_post(comment); },
             get_hover_post() { return app.get_hover_post(); },
-            set_post_thumbs(comment, val) { app.set_post_thumbs(comment, val); this.forceRerender(); },
+            set_post_thumbs(comment, val) { 
+                app.set_post_thumbs(comment, val);
+            },
             post_rating(comment,val) { return app.post_rating(comment,val); },
             forceRerender() {
                 this.rerender = !this.rerender;
@@ -213,6 +216,9 @@ let init = (app) => {
             input_text: "",
         }},
         methods: {
+            load_annotations() {
+                comment_arr = app.vue.annotations[this.line_number];
+            },
             toggle_annotations() {
                 this.showing_annotations = !this.showing_annotations;
             },
