@@ -69,8 +69,7 @@ def profile():
     profile = db(db.profile.user_id == user["id"]).select().first()
     comments = db(db.comment.user_email == get_user_email()).select()
     return dict(user=user, profile=profile, comments = comments)
-
-
+    
 @action("edit_profile", method=["GET", "POST"])
 @action.uses(db, session, auth.user, "form.html")
 def edit_profile():
@@ -89,7 +88,6 @@ def edit_profile():
         redirect(URL('profile'))
     return dict(profile=profile, form=form)
 
-
 @action('add_band', method=["GET", "POST"])
 @action.uses(db, session, auth.user, 'form.html')
 def add_band():
@@ -97,9 +95,7 @@ def add_band():
     if form.accepted:
         redirect(URL('lyrics'))
     return dict(form=form)
-
-
-
+    
 #info pages use band/ablum/song names in URL for easy access
 @action('band/<band_name>')
 @action.uses(db, auth.user, 'band.html')
@@ -232,20 +228,29 @@ def search():
 
 #--Code just for the comments section-----------
 
-
-    
-
 @action('load_posts')
 @action.uses(url_signer.verify(), db)
 def load_posts():
     song_id = id = request.params.get('song_id')
     #print(song_id)
-    conf_post = []
-    posts = db((db.comment.song_id == song_id) & 
-               (db.comment.top_level == 'true')).select(orderby=~db.comment.datetime).as_list()
-    for post in posts:
-        configure_post(post)
-        load_replies(post)
+    posts = []
+    song = db.song[song_id]
+    for i in range(0, len(song.lines)):
+        line_posts = db(
+            (db.comment.song_id == song_id) &
+            (db.comment.top_level == 'true') &
+            (db.comment.line_number == i)
+            ).select(orderby=~db.comment.datetime).as_list()
+        for post in line_posts:
+            configure_post(post)
+            load_replies(post)
+        posts.append(line_posts)
+
+    #posts = db((db.comment.song_id == song_id) & 
+    #           (db.comment.top_level == 'true')).select(orderby=~db.comment.datetime).as_list()
+    #for post in posts:
+    #    configure_post(post)
+    #    load_replies(post)
     #print(posts)
     return dict(posts = posts)
 

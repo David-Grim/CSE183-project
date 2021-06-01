@@ -10,6 +10,7 @@ let init = (app) => {
     app.data = {
         user_email: user_email,
         posts: [],
+        annotations: [],
         hover_post: null,
         post_text: "",
         add_mode: false,
@@ -215,9 +216,11 @@ let init = (app) => {
     // And this initializes it.
     app.init = () => {
         axios.get(load_posts_url, {params: {"song_id": song_id}}).then((result) => {
-            app.vue.posts = result.data.posts;
-            app.vue.posts.forEach(function (post) {
-                app.format_reply_tree(post);
+            app.vue.annotations = result.data.posts;
+            app.vue.annotations.forEach(function (posts) {
+                posts.forEach(function (post) {
+                    app.format_reply_tree(post);
+                });
             });
         });
     };

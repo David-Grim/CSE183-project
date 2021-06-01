@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css">
 </head>
 <body style="background-color: white">
-<section class="hero is-dark is full">
+<section class="hero is-dark is full" id="vue-target">
   <div class="hero-body">
     <img class="image is-128x128" src=[[=URL('download',album.image)]]>
     </figure>
@@ -28,7 +28,9 @@
                 <td><i>Released: [[=album.date]]</i></td>
             </tr>
             <tr>
-                <table class="table is-striped">
+            </table> 
+            
+                                <table class="table">
                     <thead>
                         <tr>
                             <!-- <th>Line #</th> -->
@@ -39,7 +41,36 @@
                         [[for i,line in enumerate(song.lines):]]
                         <tr>
                             <!-- <td>[[=i+1]]</td> We probably don't want to display line #s. We can just hypertext the lines to a comment form or existing comment thread -->
-                            <td>[[=line]]</td>
+                            <td>
+                                <a>[[=line]]</a><a class="is-pulled-right">num: [[=i]]</a>
+                            </td>
+                        </tr>
+                                <template v-if="annotations[ [[=i]] ]"> <!--this shouldn't be needed as annotation.length should always = len(song.lines), but it doesn't work without it-->
+                                <tr v-if="annotations[ [[=i]] ].length > 0">
+                                    <td> <a>[[=i]]</a>
+                                        
+                                    <!--set the posts to display with text, the posts author and the thumbs up and down buttons -->
+                                    <div class="section">
+                                        <div class="tile is-ancestor is-vertical">
+                                            <div v-for="thread in annotations[ [[=i]] ]" class="is-size-5">
+                                                <div class="container">
+                                                    <div id="vue-target">
+                                                        <comment
+                                                         :comment="thread"
+                                                         :parent_comment="null"
+                                                         :depth="0"   
+                                                         ></comment>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    </td>
+                                    </tr>
+                                 
+                                </template>  
+                            </td>
                         </tr>
                         [[pass]]
                     </tbody>
@@ -47,15 +78,13 @@
                 <a class="button is-primary" href="[[=URL('add_song', band.id, album.id)]]">
                     <span>Add a Song</span>
                 </a>
-            </tr>
-        </table>
       </p>
   </div>
-</section>
 
 
 
-<div class = "column" id="vue-target">
+
+<div class = "column">
   <div id = "comments" class="section">
     <div class="title">Comments</div>
   </div>
@@ -79,7 +108,7 @@
       </div>
   </div>
 
-    <!--set the posts to display with text, the posts author and the thumbs up and down buttons-->
+    <!--set the posts to display with text, the posts author and the thumbs up and down buttons
   <div class="section">
     <div class="tile is-ancestor is-vertical">
         <div v-for="thread in posts" class="is-size-5">
@@ -94,11 +123,12 @@
             </div>
         </div>
     </div>
-  </div>
+  </div>-->
   
 
   
 </div>
+</section>
 </body>
 
 [[block page_scripts]]
@@ -176,7 +206,8 @@
   let post_thumbs_url = "[[=XML(post_thumbs_url)]]";
   let user_email = "[[=XML(user_email)]]";
   let username = "[[=XML(username)]]";
-  let song_id ="[[=song.id]]"
+  let song_id = "[[=song.id]]";
+  let line_count = "[[=len(song.lines)]]";
 </script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
