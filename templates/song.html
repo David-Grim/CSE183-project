@@ -11,9 +11,8 @@
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css">
 </head>
 <body style="background-color: white">
-<section class="hero is-dark is full" id="vue-target">
+<section class="hero is-full" id="vue-target">
   <div class="hero-body">
-  <div class="tile is-vertical">
     <div class="card has-background-white">
     <div class="card-content">
     <div class="content">
@@ -35,6 +34,7 @@
             </div>
             </div>
             </div>
+            <br>
                 <div class="card has-background-white">
                     <div class="card-content">
                     <div class="content">
@@ -49,12 +49,6 @@
                     </div>
                     </div>
                 </div>
-                
-                <a class="button is-primary" href="[[=URL('add_song', band.id, album.id)]]">
-                    <span>Add a Song</span>
-                </a>
-      </p>
-  </div>
   </div>
 
 
@@ -178,9 +172,14 @@
 <script type="text/x-template" id="lyric-line-template">
     <tr>
         <td>
-            <a v-on:click="toggle_annotations()" class="lyrics is-size-5">{{line_text}}</a>
-            
+            <div v-if="has_annotations()">
+                <a v-on:click="toggle_annotations()" class="lyrics is-size-5 has-text-black has-background-warning">{{line_text}}</a>
+            </div>
+            <div v-else>
+            <a v-on:click="toggle_annotations()" class="lyrics is-size-5 has-text-black">{{line_text}}</a>
+            </div>
             <div v-if="showing_annotations">
+            <br>
             <div v-for="thread in comment_arr" class="is-size-5">
             <div class="container">
             <comment

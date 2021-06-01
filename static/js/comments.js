@@ -211,11 +211,23 @@ let init = (app) => {
         },
         data() { return { 
             showing_annotations: false,
+            commenting: false,
+            input_text: "",
         }},
         methods: {
             toggle_annotations() {
                 this.showing_annotations = !this.showing_annotations;
             },
+            has_annotations() {
+                if (this.comment_arr) return(this.comment_arr.length > 0);
+                else return false;
+            },
+            add_post() {
+                app.add_post(null, this.input_text);
+                this.input_text = "";
+                this.commenting=false;
+            },
+            
         },
     };
 
