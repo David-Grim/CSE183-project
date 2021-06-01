@@ -232,9 +232,11 @@ def search():
 @action.uses(url_signer.verify(), db)
 def load_posts():
     song_id = id = request.params.get('song_id')
+    song = db.song[song_id]
+    #lyric_lines = song.lines
     #print(song_id)
     posts = []
-    song = db.song[song_id]
+    
     for i in range(0, len(song.lines)):
         line_posts = db(
             (db.comment.song_id == song_id) &

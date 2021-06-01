@@ -10,19 +10,18 @@ let init = (app) => {
     app.data = {
         user_email: user_email,
         posts: [],
+        //lyrics: [],
         annotations: [],
         hover_post: null,
         post_text: "",
         add_mode: false,
         reply_id: -1,
     };
-    /* comments now passed by reference due to recursive tree structure, so indexing them isn't as useful
     app.enumerate = (a) => {
         let k = 0;
         a.map((e) => {e._idx = k++;});
         return a;
     };
-    */
     app.set_hover_post = (comment=null) => {
         if(comment) { app.vue.hover_post = comment.id; }
         else app.vue.hover_post = -1;
@@ -155,6 +154,7 @@ let init = (app) => {
     };
     
     app.methods = {
+        enumerate: app.enumerate,
         reset_post: app.reset_post,
         set_hover_post: app.set_hover_post,
         add_post: app.add_post,
@@ -202,6 +202,22 @@ let init = (app) => {
             
         },
     };
+    
+    app.LyricLineComponent = {
+        template: '#lyric-line-template',
+        props: {
+            line_text: String,
+            comment_arr: Array
+        },
+        data() { return { 
+            showing_annotations: false,
+        }},
+        methods: {
+            toggle_annotations() {
+                this.showing_annotations = !this.showing_annotations;
+            },
+        },
+    };
 
     // This creates the Vue instance.
     app.vue = new Vue({
@@ -209,13 +225,15 @@ let init = (app) => {
         data: app.data,
         methods: app.methods,
         components: {
-            'comment': app.CommentComponent
+            'comment': app.CommentComponent,
+            'lyric-line': app.LyricLineComponent
         }
     });
 
     // And this initializes it.
     app.init = () => {
         axios.get(load_posts_url, {params: {"song_id": song_id}}).then((result) => {
+            //app.vue.lyrics = app.enumerate(result.data.lyric_lines);
             app.vue.annotations = result.data.posts;
             app.vue.annotations.forEach(function (posts) {
                 posts.forEach(function (post) {
@@ -231,3 +249,4 @@ let init = (app) => {
 
 init(app);
 Vue.component('comment', app.CommentComponent);
+Vue.component('lyric-line', app.LyricLineComponent);

@@ -13,9 +13,12 @@
 <body style="background-color: white">
 <section class="hero is-dark is full" id="vue-target">
   <div class="hero-body">
-    <img class="image is-128x128" src=[[=URL('download',album.image)]]>
-    </figure>
-    <p class="title">[[=song.name]]</p>
+  <div class="tile is-vertical">
+    <div class="card has-background-white">
+    <div class="card-content">
+    <div class="content">
+    <img class="image is-128x128" src="[[=URL('download',album.image)]]">
+    <p class="title is-size-2 has-text-black">[[=song.name]]</p>
       <p>
         <table class="table is-striped is-fullwidth">
             <tr>
@@ -29,56 +32,29 @@
             </tr>
             <tr>
             </table> 
-            
-                                <table class="table">
-                    <thead>
-                        <tr>
-                            <!-- <th>Line #</th> -->
-                            <th>Lyrics</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            </div>
+            </div>
+            </div>
+                <div class="card has-background-white">
+                    <div class="card-content">
+                    <div class="content">
+                    <p class="is-size-3">Lyrics</p>
+                    
                         [[for i,line in enumerate(song.lines):]]
-                        <tr>
-                            <!-- <td>[[=i+1]]</td> We probably don't want to display line #s. We can just hypertext the lines to a comment form or existing comment thread -->
-                            <td>
-                                <a>[[=line]]</a><a class="is-pulled-right">num: [[=i]]</a>
-                            </td>
-                        </tr>
-                                <template v-if="annotations[ [[=i]] ]"> <!--this shouldn't be needed as annotation.length should always = len(song.lines), but it doesn't work without it-->
-                                <tr v-if="annotations[ [[=i]] ].length > 0">
-                                    <td> <a>[[=i]]</a>
-                                        
-                                    <!--set the posts to display with text, the posts author and the thumbs up and down buttons -->
-                                    <div class="section">
-                                        <div class="tile is-ancestor is-vertical">
-                                            <div v-for="thread in annotations[ [[=i]] ]" class="is-size-5">
-                                                <div class="container">
-                                                    <div id="vue-target">
-                                                        <comment
-                                                         :comment="thread"
-                                                         :parent_comment="null"
-                                                         :depth="0"   
-                                                         ></comment>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    </td>
-                                    </tr>
-                                 
-                                </template>  
-                            </td>
-                        </tr>
+                            <lyric-line
+                                line_text="[[=line]]"
+                                :comment_arr="annotations[ [[=i]] ]"
+                                ></lyric-line>
                         [[pass]]
-                    </tbody>
-                </table>
+                    </div>
+                    </div>
+                </div>
+                
                 <a class="button is-primary" href="[[=URL('add_song', band.id, album.id)]]">
                     <span>Add a Song</span>
                 </a>
       </p>
+  </div>
   </div>
 
 
@@ -198,6 +174,25 @@
             :depth="depth + 1"   
             ></comment>
     </div>
+</script>
+<script type="text/x-template" id="lyric-line-template">
+    <tr>
+        <td>
+            <a v-on:click="toggle_annotations()" class="lyrics is-size-5">{{line_text}}</a>
+            
+            <div v-if="showing_annotations">
+            <div v-for="thread in comment_arr" class="is-size-5">
+            <div class="container">
+            <comment
+                                    :comment="thread"
+                                    :parent_comment="null"
+                                    :depth="0"   
+                                    ></comment>
+            </div>
+            </div>
+            </div>
+        </td>
+    </tr>
 </script>
 <script>
   let load_posts_url = "[[=XML(load_posts_url)]]";
