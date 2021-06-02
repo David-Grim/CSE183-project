@@ -9,13 +9,7 @@ let app = {};
 let init = (app) => {
     app.data = {
         user_email: user_email,
-        posts: [],
-        //lyrics: [],
         annotations: [],
-        hover_post: null,
-        post_text: "",
-        add_mode: false,
-        reply_id: -1,
     };
     app.set_hover_post = (comment=null) => {
         if(comment) { app.vue.hover_post = comment.id; }
@@ -107,16 +101,26 @@ let init = (app) => {
         });
      };
 
-    app.delete_post = (comment_id, parent=null) => {
+    app.delete_thread = (comment_id, line_number=-1) => {
         axios.post(delete_post_url,
         {
             comment_id,
             
         }).then(() => {
-             if(parent!==null) { parent.posts = parent.posts.filter((post) => post.id != comment_id); }
-             else { app.vue.posts = app.vue.posts.filter((post) => post.id != comment_id); }
-             
-             
+            if(line_number != -1) {
+                Vue.set(app.vue.annotations, line_number, 
+                    app.vue.annotations[line_number].filter((post) => post.id != comment_id));
+            }
+        });
+    };
+    
+    app.delete_reply = (comment_id, parent=null) => {
+        axios.post(delete_post_url,
+        {
+            comment_id,
+            
+        }).then(() => {
+            if(parent !== null) parent.posts = parent.posts.filter((post) => post.id != comment_id);
         });
     };
 
@@ -156,7 +160,8 @@ let init = (app) => {
         reset_post: app.reset_post,
         set_hover_post: app.set_hover_post,
         add_post: app.add_post,
-        delete_post: app.delete_post,
+        delete_thread: app.delete_thread,
+        delete_reply: app.delete_reply,
         set_new_post: app.set_new_post,
         post_rating: app.post_rating,
         set_post_thumbs: app.set_post_thumbs,
@@ -172,16 +177,19 @@ let init = (app) => {
             replying: false,
             input_text: "",
             mouse_hover: false,
-            rerender: false,
-            showChildren: (this.depth < DEFAULT_SHOW_REPLIES_DEPTH)
+            show_children: (this.depth < DEFAULT_SHOW_REPLIES_DEPTH)
         }},
         computed: {
             indent() {
-            return { transform: `translate(${this.depth * 50}px)` };
+            return { transform: `translate(${this.depth * 30}px)` };
             }
         },
         methods: {
-            delete_post() { app.delete_post(this.comment.id, this.parent_comment); },
+            delete_post() {
+                if(this.parent_comment !== null) {
+                    app.delete_reply(this.comment.id, this.parent_comment);
+                } else app.delete_thread(this.comment.id, this.comment.line_number);
+            },
             add_post() {
                 app.add_post(this.comment, this.input_text);
                 this.input_text = "";
@@ -193,11 +201,8 @@ let init = (app) => {
                 app.set_post_thumbs(comment, val);
             },
             post_rating(comment,val) { return app.post_rating(comment,val); },
-            forceRerender() {
-                this.rerender = !this.rerender;
-            },
-            toggleChildren() {
-                this.showChildren = !this.showChildren;
+            toggle_children() {
+                this.show_children = !this.show_children;
             },
             
         },

@@ -68,7 +68,7 @@ def profile():
     db.profile.update_or_insert(user_id = user["id"])
     profile = db(db.profile.user_id == user["id"]).select().first()
     comments = db(db.comment.user_email == get_user_email()).select()
-    return dict(user=user, profile=profile, comments = comments)
+    return dict(username=user["username"], profile=profile, comments = comments)
     
 @action("edit_profile", method=["GET", "POST"])
 @action.uses(db, session, auth.user, "form.html")

@@ -1,9 +1,5 @@
 [[extend 'layout.html']]
 
-<!-- This page displays info for a specific song
-     Focus was entirely on db retrieval...
-     so it needs serious touching up or redesign -->
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name = "viewport" content="width=device-width, initial-scale=1.0">
@@ -11,102 +7,95 @@
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css">
 </head>
 <body style="background-color: white">
-<section class="hero is-full" id="vue-target">
-  <div class="hero-body">
-    <div class="card has-background-white">
-    <div class="card-content">
-    <div class="content">
-    <img class="image is-128x128" src="[[=URL('download',album.image)]]">
-    <p class="title is-size-2 has-text-black">[[=song.name]]</p>
-      <p>
-        <table class="table is-striped is-fullwidth">
-            <tr>
-                <th>Artist: <a class="has-text-link" href="[[=URL('band', band.name)]]">[[=band.name]]</a></th>  
-            </tr>
-            <tr>
-                <th>Album: <a class="has-text-link" href="[[=URL('album', album.name)]]">[[=album.name]]</a></th>  
-            </tr>
-            <tr>
-                <td><i>Released: [[=album.date]]</i></td>
-            </tr>
-            <tr>
-            </table> 
-            </div>
-            </div>
+    <section class="hero is-full" id="vue-target">
+        <div class="hero-body">
+            <div class="card has-background-white">
+                <div class="card-content">
+                    <div class="content">
+                        <img class="image is-128x128" src="[[=URL('download',album.image)]]">
+                        <p class="title is-size-2 has-text-black">[[=song.name]]</p>
+                        <table class="table is-fullwidth">
+                            <tr>
+                                <th>Artist: <a class="has-text-link" href="[[=URL('band', band.name)]]">[[=band.name]]</a></th>  
+                            </tr>
+                            <tr>
+                                <th>Album: <a class="has-text-link" href="[[=URL('album', album.name)]]">[[=album.name]]</a></th>  
+                            </tr>
+                            <tr>
+                                <td><i>Released: [[=album.date]]</i></td>
+                            </tr>
+                        </table> 
+                    </div>
+                </div>
             </div>
             <br>
-                <div class="card has-background-white">
-                    <div class="card-content">
+            <div class="card has-background-white">
+                <div class="card-content">
                     <div class="content">
                     <p class="is-size-3">Lyrics</p>
-                    
-                        [[for i,line in enumerate(song.lines):]]
-                            <lyric-line
-                                line_text="[[=line]]"
-                                :comment_arr="annotations[ [[=i]] ]"
-                                :line_number="[[=i]]"
-                                ></lyric-line>
-                        [[pass]]
+                    [[for i,line in enumerate(song.lines):]]
+                        <lyric-line
+                            line_text="[[=line]]"
+                            :comment_arr="annotations[ [[=i]] ]"
+                            :line_number="[[=i]]"
+                            ></lyric-line>
+                    [[pass]]
                     </div>
-                    </div>
-                </div>
-  </div>
-
-
-
-<!-- This handles general comments. Currently removed but leaving it here for later use
-<div class = "column">
-  <div id = "comments" class="section">
-    <div class="title">Comments</div>
-  </div>
-
-  
-  <div class="section">
-      <!--Section for showing the form to write a post
-      <div v-if="add_mode">
-        <div class="field">
-          <textarea v-model="post_text" class="textarea" placeholder="Type something!"></textarea>
-        </div>
-        <button v-on:click="add_post(); set_new_post(false)" class="button is-primary is-size-5">Post</button>
-        <button v-on:click="reset_post(); set_new_post(false)" class="button is-warning is-size-5">Cancel</button>
-      </div>
-
-      <!--Section for when the form shouldn't be on the screen
-      <div v-if="!add_mode">
-        <button v-on:click="set_new_post(true)" class="button is-primary is-size-5">
-          <i class="fa fa-plus fa-fw"></i>
-        </button>
-      </div>
-  </div>
-
-    <!--set the posts to display with text, the posts author and the thumbs up and down buttons
-  <div class="section">
-    <div class="tile is-ancestor is-vertical">
-        <div v-for="thread in posts" class="is-size-5">
-            <div class="container">
-                <div id="vue-target">
-                    <comment
-                     :comment="thread"
-                     :parent_comment="null"
-                     :depth="0"   
-                     ></comment>
                 </div>
             </div>
         </div>
-    </div>
-  </div>-->
-  
 
-  
-</div>
-</section>
+
+
+        <!-- This handles general comments. Currently removed but leaving it here for later use
+        <div class = "column">
+            <div id = "comments" class="section">
+                <div class="title">Comments</div>
+            </div>
+            <div class="section">
+            <!-- Section for showing the form to write a post
+                <div v-if="add_mode">
+                    <div class="field">
+                        <textarea v-model="post_text" class="textarea" placeholder="Type something!"></textarea>
+                    </div>
+                    <button v-on:click="add_post(); set_new_post(false)" class="button is-primary is-size-5">Post</button>
+                    <button v-on:click="reset_post(); set_new_post(false)" class="button is-warning is-size-5">Cancel</button>
+                </div>
+
+                <!-- Section for when the form shouldn't be on the screen
+                <div v-if="!add_mode">
+                    <button v-on:click="set_new_post(true)" class="button is-primary is-size-5">
+                        <i class="fa fa-plus fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- set the posts to display with text, the posts author and the thumbs up and down buttons
+            <div class="section">
+                <div class="tile is-ancestor is-vertical">
+                    <div v-for="thread in posts" class="is-size-5">
+                        <div class="container">
+                            <div id="vue-target">
+                                <comment
+                                    :comment="thread"
+                                    :parent_comment="null"
+                                    :depth="0"   
+                                ></comment>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+    </section>
 </body>
 
 [[block page_scripts]]
 <script type="text/x-template" id="comment-template">
     <div class="comment">
         <div :style="indent">  
-            <div class="card notification is-outlined has-background-grey-lighter is-child is-size-5"> 
+            <div class="box has-background-grey-lighter is-child is-size-5"> 
                 <div> {{comment.post_text}} </div>
                 <div class="is-size-5 has-text-grey"> {{comment.author}} </div>
                 <div class="is-size-3">
@@ -128,42 +117,41 @@
                     </span>
 
                     <span class="has-text-info" v-on:mouseover="mouse_hover=true;">
-                    <span v-on:mouseleave="mouse_hover=false;">
-                        <span>
-                            <i v-on:click="set_post_thumbs(comment, 0);"
-                            v-if="post_rating(comment,1)" class="fa fa-flip-horizontal fa-thumbs-up"></i>
-                            <i v-on:click="set_post_thumbs(comment, 1);"
-                            v-if="!post_rating(comment,1)" class="fa fa-flip-horizontal fa-thumbs-o-up"></i>
-                        </span>
+                        <span v-on:mouseleave="mouse_hover=false;">
+                            <span>
+                                <i v-on:click="set_post_thumbs(comment, 0);"
+                                v-if="post_rating(comment,1)" class="fa fa-flip-horizontal fa-thumbs-up"></i>
+                                <i v-on:click="set_post_thumbs(comment, 1);"
+                                v-if="!post_rating(comment,1)" class="fa fa-flip-horizontal fa-thumbs-o-up"></i>
+                            </span>
 
-                        <span>
-                            <i v-on:click="set_post_thumbs(comment,0);" v-if="post_rating(comment,-1)"
-                            class="fa fa-thumbs-down"></i>
-                            <i v-on:click="set_post_thumbs(comment,-1);" v-if="!post_rating(comment,-1)"
-                            class="fa fa-thumbs-o-down"></i>
-                        </span>
-                        
-                        <span v-if="mouse_hover" class="has-text-info">
-                            <span v-if="comment.likes.length > 0" class="is-size-6">
-                            Liked by:<span v-for="like in comment.likes"> {{like.name}}<span v-if="comment.likes.length > 1">,</span></span>
+                            <span>
+                                <i v-on:click="set_post_thumbs(comment,0);" v-if="post_rating(comment,-1)"
+                                class="fa fa-thumbs-down"></i>
+                                <i v-on:click="set_post_thumbs(comment,-1);" v-if="!post_rating(comment,-1)"
+                                class="fa fa-thumbs-o-down"></i>
                             </span>
-                            <span v-if="comment.dislikes.length > 0" class="is-size-6">
-                            Disliked by:<span v-for="dislike in comment.dislikes"> {{dislike.name}}<span v-if="comment.dislikes.length > 1">,</span></span>
+                            
+                            <span v-if="mouse_hover" class="has-text-info">
+                                <span v-if="comment.likes.length > 0" class="is-size-6">
+                                Liked by:<span v-for="like in comment.likes"> {{like.name}}<span v-if="comment.likes.length > 1">,</span></span>
+                                </span>
+                                <span v-if="comment.dislikes.length > 0" class="is-size-6">
+                                Disliked by:<span v-for="dislike in comment.dislikes"> {{dislike.name}}<span v-if="comment.dislikes.length > 1">,</span></span>
+                                </span>
                             </span>
                         </span>
-                        <i v-if="rerender"></i><i v-if="!rerender"></i>
-                    </span>
                     </span>
                 </div>
             </div>
-        <div v-if="comment.posts.length">
-            <div v-if="!showChildren" @click="toggleChildren">Show Replies</div>
-            <div v-else @click="toggleChildren">Hide Replies</div>
-        </div>
-        <div v-else></div>
+            <div v-if="comment.posts.length">
+                <div v-if="!show_children" @click="toggle_children">Show Replies</div>
+                <div v-else @click="toggle_children">Hide Replies</div>
+            </div>
+            <div v-else></div>
         </div>
         <comment
-            v-if="showChildren"
+            v-if="show_children"
             v-for="reply in comment.posts" 
             :key="reply.id"
 
@@ -174,17 +162,14 @@
     </div>
 </script>
 <script type="text/x-template" id="lyric-line-template">
-    <tr>
-        <td>
-            <div v-if="has_annotations()">
-                <a v-on:click="toggle_annotations()" class="lyrics is-size-5 has-text-black has-background-warning">{{line_text}}</a>
-            </div>
-            <div v-else>
+    <div class="lyric-line">
+        <div v-if="has_annotations()">
+            <a v-on:click="toggle_annotations()" class="lyrics is-size-5 has-text-black has-background-warning">{{line_text}}</a>
+        </div>
+        <div v-else>
             <a v-on:click="toggle_annotations()" class="lyrics is-size-5 has-text-black">{{line_text}}</a>
-            </div>
-            <div v-if="showing_annotations">
-            
-            
+        </div>
+        <div v-if="showing_annotations">
             <div class="section">
                 <!--Section for showing the form to write a post-->
                 <div v-if="commenting">
@@ -194,28 +179,24 @@
                     <button v-on:click="add_post()" class="button is-primary is-size-5">Post</button>
                     <button v-on:click="commenting=false" class="button is-warning is-size-5">Cancel</button>
                 </div>
-
                 <!--Section for when the form shouldn't be on the screen-->
                 <div v-if="!commenting">
                     <button v-on:click="commenting=true" class="button is-primary is-size-5">
                         <i class="fa fa-plus fa-fw"></i>
-                </button>
+                    </button>
                 </div>
             </div>
-            
-            
             <div v-for="thread in comment_arr" class="is-size-5">
-            <div class="container">
-            <comment
-                                    :comment="thread"
-                                    :parent_comment="null"
-                                    :depth="0"   
-                                    ></comment>
+                <div class="container">
+                    <comment
+                        :comment="thread"
+                        :parent_comment="null"
+                        :depth="0"   
+                        ></comment>
+                </div>
             </div>
-            </div>
-            </div>
-        </td>
-    </tr>
+        </div>
+    </div>
 </script>
 <script>
   let load_posts_url = "[[=XML(load_posts_url)]]";
@@ -223,9 +204,7 @@
   let delete_post_url = "[[=XML(delete_post_url)]]";
   let post_thumbs_url = "[[=XML(post_thumbs_url)]]";
   let user_email = "[[=XML(user_email)]]";
-  let username = "[[=XML(username)]]";
   let song_id = "[[=song.id]]";
-  let line_count = "[[=len(song.lines)]]";
 </script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
