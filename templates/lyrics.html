@@ -28,6 +28,11 @@
     <link rel = "stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 </head>
 <body style="background-color: white">
+
+<div class="card has-background-white">
+    <div class="card-content">
+        <div class="content">
+
 <section class="hero is full has-text-black">
   <div class="hero-body">
     <p class="title has-text-black">
@@ -40,9 +45,11 @@
   </div>
 </section>
 
+
+
 <div class="section" id="vue-target" v-cloak>
   <div class="control block">
-    <input class="input has-text-black" type="text" v-model="query" @keyup="search" placeholder="Search for songs, bands, or albums" />
+    <input class="input is-black has-text-black" type="text" v-model="query" @keyup="search" placeholder="Search for songs, bands, or albums" />
   </div>
 
   <div>
@@ -55,7 +62,15 @@
   
 </div>
 
+</div>
+</div>
+</div>
+<br>
 
+
+<div class="card has-background-white">
+    <div class="card-content">
+        <div class="content">
 <div class = "title has-text-black">Catalog of Bands </div>
 <a class="button is-primary" href= "[[=URL('add_band')]]">Add New Band</a>
 </br>
@@ -72,6 +87,11 @@
     [[pass]]
     
 </table>
+
+</div>
+</div>
+</div>
+
 </body>
 
 

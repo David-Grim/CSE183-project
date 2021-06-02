@@ -6,29 +6,39 @@
     <link rel = "stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 </head>
 <body style="background-color: white">
-<section class="hero is full ">
-  <div class="hero-body">
-    <p class="title has-text-black">
-      Welcome to No Filter. 
-    </p>
-      <p class ="has-text-black">
-          The goal of this project is to give users a clean interface for sharing and discussing lyrics
-          from their favorite music.
-      </p>
-  </div>
-</section>
-<div class ="title has-text-black">Newly added lyrics</div>
-<table>
-            [[for song in songs[:10]:]]
-            <tr>
-                <td class = "is-size-5">
-                    <a href="[[=URL('song', song.id)]]">[[=song.name]]</a>
-                </td>
-                <!--<td><a>[[=song.band_id]]</a></td>-->
-            </tr>
-            [[pass]]
-
-  </table>
+    <div class="card has-background-white">
+        <div class="card-content">
+            <div class="content">
+                <section class="hero is full ">
+                    <div class="hero-body">
+                        <p class="title has-text-black">
+                        Welcome to No Filter. 
+                        </p>
+                        <p class ="has-text-black is-size-5">
+                            The goal of this project is to give users a clean interface for sharing and discussing lyrics
+                            from their favorite music.
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="card has-background-white">
+        <div class="card-content">
+            <div class="content">
+                <div class ="title has-text-black">Newly added lyrics</div>
+                <table>
+                    [[for song in songs[:10]:]]
+                    <tr>
+                        <td class = "is-size-5">
+                            <a href="[[=URL('song', song.id)]]">[[=song.name]]</a>
+                        </td>
+                        <!--<td><a>[[=song.band_id]]</a></td>-->
+                    </tr>
+                    [[pass]]
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
-
-
