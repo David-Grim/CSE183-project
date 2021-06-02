@@ -10,18 +10,13 @@ let init = (app) => {
     app.data = {
         user_email: user_email,
         posts: [],
+        //lyrics: [],
+        annotations: [],
         hover_post: null,
         post_text: "",
         add_mode: false,
         reply_id: -1,
     };
-    /* comments now passed by reference due to recursive tree structure, so indexing them isn't as useful
-    app.enumerate = (a) => {
-        let k = 0;
-        a.map((e) => {e._idx = k++;});
-        return a;
-    };
-    */
     app.set_hover_post = (comment=null) => {
         if(comment) { app.vue.hover_post = comment.id; }
         else app.vue.hover_post = -1;
@@ -71,21 +66,25 @@ let init = (app) => {
     }
    };
 
-    app.add_post = (reply_target=null, post_text = app.vue.post_text) => {
+    app.add_post = (reply_target=null, post_text = app.vue.post_text, line_number=-1) => {
         reply_id = -1; //remains -1 if post is not a reply
         if (reply_target !== null) reply_id = reply_target.id;
         axios.post(add_post_url,
         {
             song_id: song_id,
             reply_id: reply_id,
-            post_text: post_text
+            post_text: post_text,
+            line_number: line_number
 
         }).then((response) => {
             let post = response.data.post;
             app.format_post_thumbs(post);
             post.posts = [];
-            if (reply_target === null) { app.vue.posts = [response.data.post,...app.vue.posts];
-            } else reply_target.posts = [response.data.post,...reply_target.posts];
+            if (reply_target === null) {
+                if(post.line_number == -1) app.vue.posts.unshift(post);
+                else app.vue.annotations[post.line_number].unshift(post);
+                //else app.vue.annotations[post.line_number] = [post,...app.vue.annotations[post.line_number]];
+            } else reply_target.posts.unshift(post);
             app.reset_post();
         });
    };
@@ -190,13 +189,48 @@ let init = (app) => {
             },
             set_hover_post(comment) { app.set_hover_post(comment); },
             get_hover_post() { return app.get_hover_post(); },
-            set_post_thumbs(comment, val) { app.set_post_thumbs(comment, val); this.forceRerender(); },
+            set_post_thumbs(comment, val) { 
+                app.set_post_thumbs(comment, val);
+            },
             post_rating(comment,val) { return app.post_rating(comment,val); },
             forceRerender() {
                 this.rerender = !this.rerender;
             },
             toggleChildren() {
                 this.showChildren = !this.showChildren;
+            },
+            
+        },
+    };
+    
+    app.LyricLineComponent = {
+        template: '#lyric-line-template',
+        props: {
+            line_text: String,
+            comment_arr: Array,
+            line_number: Number
+        },
+        data() { return { 
+            showing_annotations: false,
+            commenting: false,
+            input_text: "",
+        }},
+        methods: {
+            load_annotations() {
+                comment_arr = app.vue.annotations[this.line_number];
+            },
+            toggle_annotations() {
+                this.showing_annotations = !this.showing_annotations;
+            },
+            has_annotations() {
+                if (this.comment_arr) return(this.comment_arr.length > 0);
+                else return false;
+            },
+            add_post() {
+                app.add_post(null, this.input_text, this.line_number);
+                this.comment_arr = app.vue.annotations[this.line_number];
+                this.input_text = "";
+                this.commenting=false;
             },
             
         },
@@ -208,16 +242,19 @@ let init = (app) => {
         data: app.data,
         methods: app.methods,
         components: {
-            'comment': app.CommentComponent
+            'comment': app.CommentComponent,
+            'lyric-line': app.LyricLineComponent
         }
     });
 
     // And this initializes it.
     app.init = () => {
         axios.get(load_posts_url, {params: {"song_id": song_id}}).then((result) => {
-            app.vue.posts = result.data.posts;
-            app.vue.posts.forEach(function (post) {
-                app.format_reply_tree(post);
+            app.vue.annotations = result.data.annotations;
+            app.vue.annotations.forEach(function (posts) {
+                posts.forEach(function (post) {
+                    app.format_reply_tree(post);
+                });
             });
         });
     };
@@ -228,3 +265,4 @@ let init = (app) => {
 
 init(app);
 Vue.component('comment', app.CommentComponent);
+Vue.component('lyric-line', app.LyricLineComponent);
