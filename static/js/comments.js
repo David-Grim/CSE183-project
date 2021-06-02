@@ -250,7 +250,7 @@ let init = (app) => {
     // And this initializes it.
     app.init = () => {
         axios.get(load_posts_url, {params: {"song_id": song_id}}).then((result) => {
-            app.vue.annotations = result.data.posts;
+            app.vue.annotations = result.data.annotations;
             app.vue.annotations.forEach(function (posts) {
                 posts.forEach(function (post) {
                     app.format_reply_tree(post);

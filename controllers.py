@@ -235,7 +235,7 @@ def load_posts():
     song = db.song[song_id]
     #lyric_lines = song.lines
     #print(song_id)
-    posts = []
+    annotations = []
     
     for i in range(0, len(song.lines)):
         line_posts = db(
@@ -246,15 +246,17 @@ def load_posts():
         for post in line_posts:
             configure_post(post)
             load_replies(post)
-        posts.append(line_posts)
-
+        annotations.append(line_posts)
+    
+    #this loads comments that aren't line specific, leaving it here to implement general comments later
     #posts = db((db.comment.song_id == song_id) & 
-    #           (db.comment.top_level == 'true')).select(orderby=~db.comment.datetime).as_list()
+    #           (db.comment.top_level == 'true') &
+    #           (db.comment.line_number == -1)).select(orderby=~db.comment.datetime).as_list()
     #for post in posts:
     #    configure_post(post)
     #    load_replies(post)
     #print(posts)
-    return dict(posts = posts)
+    return dict(annotations=annotations)
 
 @action('add_post', method = "POST")
 @action.uses(url_signer.verify(), db)

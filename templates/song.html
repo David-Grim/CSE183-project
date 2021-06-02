@@ -54,15 +54,15 @@
 
 
 
-
+<!-- This handles general comments. Currently removed but leaving it here for later use
 <div class = "column">
   <div id = "comments" class="section">
     <div class="title">Comments</div>
   </div>
 
-
+  
   <div class="section">
-      <!--Section for showing the form to write a post-->
+      <!--Section for showing the form to write a post
       <div v-if="add_mode">
         <div class="field">
           <textarea v-model="post_text" class="textarea" placeholder="Type something!"></textarea>
@@ -71,7 +71,7 @@
         <button v-on:click="reset_post(); set_new_post(false)" class="button is-warning is-size-5">Cancel</button>
       </div>
 
-      <!--Section for when the form shouldn't be on the screen-->
+      <!--Section for when the form shouldn't be on the screen
       <div v-if="!add_mode">
         <button v-on:click="set_new_post(true)" class="button is-primary is-size-5">
           <i class="fa fa-plus fa-fw"></i>
@@ -106,7 +106,7 @@
 <script type="text/x-template" id="comment-template">
     <div class="comment">
         <div :style="indent">  
-            <div class="tile notification is-light is-child is-size-5"> 
+            <div class="card notification is-outlined has-background-grey-lighter is-child is-size-5"> 
                 <div> {{comment.post_text}} </div>
                 <div class="is-size-5 has-text-grey"> {{comment.author}} </div>
                 <div class="is-size-3">
@@ -156,8 +156,11 @@
                     </span>
                 </div>
             </div>
-        <div v-if="comment.posts.length && !showChildren" @click="toggleChildren">Show Replies</div>
-        <div v-else @click="toggleChildren">Hide Replies</div>
+        <div v-if="comment.posts.length">
+            <div v-if="!showChildren" @click="toggleChildren">Show Replies</div>
+            <div v-else @click="toggleChildren">Hide Replies</div>
+        </div>
+        <div v-else></div>
         </div>
         <comment
             v-if="showChildren"
@@ -196,7 +199,7 @@
                 <div v-if="!commenting">
                     <button v-on:click="commenting=true" class="button is-primary is-size-5">
                         <i class="fa fa-plus fa-fw"></i>
-                    </button>
+                </button>
                 </div>
             </div>
             
