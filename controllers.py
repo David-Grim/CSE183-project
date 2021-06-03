@@ -32,7 +32,7 @@ from py4web.utils.url_signer import URLSigner
 from .models import get_user_email, get_user_id, get_time
 from py4web.utils.form import Form, FormStyleBulma
 from pydal.validators import *
-
+import bisect
 
 url_signer = URLSigner(session)
 
@@ -167,6 +167,7 @@ def add_song(band_id=None, album_id=None):
 def song(song_id=None):
     email = get_user_email()
     name = auth.current_user.get('first_name') + " " + auth.current_user.get("last_name")
+    user_id = get_user_id();
     assert song_id is not None
 
     #assert song_name is not None
@@ -183,9 +184,10 @@ def song(song_id=None):
                 load_posts_url = URL('load_posts', signer=url_signer),
                 add_post_url = URL('add_post', signer=url_signer),
                 delete_post_url = URL('delete_post', signer=url_signer),
-                post_thumbs_url = URL('post_thumbs', signer=url_signer),
+                vote_post_url = URL('vote_post', signer=url_signer),
                 user_email = email,
                 username = name,
+                user_id = user_id,
                 )
 
 # Search function for search bar in lyrics section.
@@ -255,7 +257,7 @@ def load_posts():
     #for post in posts:
     #    configure_post(post)
     #    load_replies(post)
-    #print(posts)
+    #print(annotations)
     return dict(annotations=annotations)
 
 @action('add_post', method = "POST")
@@ -296,34 +298,42 @@ def delete_post():
         db(db.comment.id == comment_id).delete()
     return "ok"
 
-@action('post_thumbs', method = "POST")
+@action('vote_post', method = "POST")
 @action.uses(url_signer.verify(), db)
-def post_thumbs():
+def vote_post():
+    user_email = get_user_email();
     comment_id = request.json.get('comment_id')
     rating = request.json.get('rating')
-    user_email = auth.current_user.get("email")
-
     db.thumbs.update_or_insert(
         (comment_id == db.thumbs.comment_id )&(user_email == db.thumbs.user_email),
         rating = rating,
         comment_id = comment_id,
         user_email = user_email,
     )
-    post = db.comment[comment_id].as_dict()
-    configure_post(post)
-    return dict(post = post)
-    
+    upvotes = db((db.thumbs.comment_id == comment_id) &
+                 (db.thumbs.rating == 1)).select().as_list()
+    downvotes = db((db.thumbs.comment_id == comment_id) &
+                 (db.thumbs.rating == -1)).select().as_list()
+    return dict(upvotes=upvotes, downvotes=downvotes)
 
 def configure_post(post):
-    thumbs = db(db.thumbs.comment_id == post['id']).select().as_list()
-    for thumb in thumbs:
-        user = db(db.auth_user.email == thumb["user_email"]).select().first()
-        name = user.first_name + " " + user.last_name if user is not None else "Unknown"
-        thumb["name"] = name
+    #thumbs = db(db.thumbs.comment_id == post['id']).select().as_list()
+    #for thumb in thumbs:
+    #    user = db(db.auth_user.email == thumb["user_email"]).select().first()
+    #    name = user.first_name + " " + user.last_name if user is not None else "Unknown"
+    #    thumb["name"] = name
     user = db(db.auth_user.id == post['user_id']).select().first()
+    avatar = db(db.profile.user_id == post['user_id']).select().first().avatar
     author = user.first_name + " " + user.last_name if user is not None else "Unknown"
+    upvotes = db((db.thumbs.comment_id == post['id']) &
+                 (db.thumbs.rating == 1)).select().as_list()
+    downvotes = db((db.thumbs.comment_id == post['id']) &
+                 (db.thumbs.rating == -1)).select().as_list()
     post["author"] = author
-    post["thumbs"] = thumbs
+    post["avatar"] = avatar
+    post["upvotes"] = upvotes
+    post["downvotes"] = downvotes
+    #post["thumbs"] = thumbs
     
 def load_replies(post):
     replies = db(db.comment.comment_id == post['id']).select(orderby=~db.comment.datetime).as_list()
