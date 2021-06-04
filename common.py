@@ -38,11 +38,11 @@ for item in settings.LOGGERS:
 if os.environ.get("GAE_ENV"):
     db = DAL(
         settings.CLOUD_DB_URI,
-        folder=settings.CLOUD_DB_FOLDER,
+       # folder=settings.CLOUD_DB_FOLDER, #your professor deleted this @ 5:08 because you're not using SQL lite
         pool_size=settings.CLOUD_DB_POOL_SIZE,
         migrate=settings.CLOUD_DB_MIGRATE,
         fake_migrate=settings.CLOUD_DB_FAKE_MIGRATE,
-    )
+        )
 else:
     db = DAL(
         settings.DB_URI,
@@ -188,10 +188,10 @@ if settings.OAUTH2OKTA_CLIENT_ID:
 # files uploaded and reference by Field(type='upload')
 # #######################################################
 #if settings.UPLOAD_FOLDER:
-    @action('download/<filename>')
-    @action.uses(db)
-    def download(filename):
-        return downloader(db, settings.UPLOAD_FOLDER, filename)
+   #@action('download/<filename>')
+   #@action.uses(db)
+   #def download(filename):
+        #return downloader(db, settings.UPLOAD_FOLDER, filename)
     # To take advantage of this in Form(s)
     # for every field of type upload you MUST specify:
     #
