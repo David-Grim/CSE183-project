@@ -110,7 +110,7 @@ body {
 
     <header class = "dblack" id="darkblack">
       <!-- Navigation bar -->
-      <nav >
+      <nav>
         <!-- Logo -->
         <a href="[[=URL('index')]]">
           <b class = "is-size-1  glow" @mouseover = "cursor: url(images/pink.cur),auto;">{nofilter}
@@ -118,7 +118,22 @@ body {
           </b>
           
         </a>
-        
+
+        </br>
+        [[if globals().get('user'):]]
+        <div class = "navbar-item is-pulled-right has-text-black">
+          <p>[[=globals().get('user').get('email')]]</p>
+        </div>
+        </br>
+        </br>
+        [[pass]]
+        <div class = "navbar-item is-pulled-right">
+          <div class = "buttons">
+            [[if globals().get('user'):]]
+            [[pass]]
+          </div>
+        </div>
+
         <!-- Do not touch this -->
         <label for="hamburger">☰</label>
         <input type="checkbox" id="hamburger">
@@ -135,17 +150,11 @@ body {
             </a>
             <ul>
               <!--<li><a href="[[=URL('auth/profile')]]">Edit Profile</a></li>-->
-              <li><a href="[[=URL('auth/change_password')]]">Change Password</a></li>
-              <li><a href="[[=URL('auth/logout')]]">Logout</a></li>
+              <a class = "button " href = "[[=URL('auth/logout')]]">Sign Out</a>
             </ul>
           </li>
           [[else:]]
           <li>
-            Login
-            <ul>
-              <li><a href="[[=URL('auth/register')]]">Sign up</a></li>
-              <li><a href="[[=URL('auth/login')]]">Log in</a></li>
-            </ul>
           </li>
           [[pass]]
         </ul>
