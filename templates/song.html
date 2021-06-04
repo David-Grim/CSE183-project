@@ -12,8 +12,16 @@
             <div class="card has-background-white">
                 <div class="card-content">
                     <div class="content">
-                        <img class="image is-128x128" src="[[=URL('download',album.image)]]">
-                        <p class="title is-size-2 has-text-black">[[=song.name]]</p>
+                        <div class="section">
+                        <nav class="level">
+                            <div class="level-left">
+                            <div class="level-item">
+                                <img class="image is-128x128" src="[[=URL('download',album.image)]]">
+                            </div>
+                            <p class="level-item title is-size-2 has-text-black">[[=song.name]]</p>
+                            </div>
+                        </nav>
+                        </div>
                         <table class="table is-fullwidth">
                             <tr>
                                 <th>Artist: <a class="has-text-link" href="[[=URL('band', band.name)]]">[[=band.name]]</a></th>  
@@ -95,7 +103,8 @@
 <script type="text/x-template" id="comment-template">
     <div class="comment">
         <div :style="indent">  
-            <div class="box has-background-grey-lighter is-child is-size-5"> 
+            <div class="card is-child is-size-5">
+            <div class="box">
                 <div> {{comment.post_text}} </div>
                 <div class="is-size-5 has-text-grey"> {{comment.author}} </div>
                 <div class="is-size-3">
@@ -144,11 +153,12 @@
                     </span>
                 </div>
             </div>
+            </div>
             <div v-if="comment.posts.length">
                 <div v-if="!show_children" @click="toggle_children">Show Replies</div>
                 <div v-else @click="toggle_children">Hide Replies</div>
             </div>
-            <div v-else></div>
+            <div v-else><br></div>
         </div>
         <comment
             v-if="show_children"
