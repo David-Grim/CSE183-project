@@ -243,20 +243,11 @@ def load_posts():
             (db.comment.song_id == song_id) &
             (db.comment.top_level == 'true') &
             (db.comment.line_number == i)
-            ).select(orderby=~db.comment.datetime).as_list()
+            ).select(orderby=~db.comment.score).as_list()
         for post in line_posts:
             configure_post(post)
             load_replies(post)
         annotations.append(line_posts)
-    
-    #this loads comments that aren't line specific, leaving it here to implement general comments later
-    #posts = db((db.comment.song_id == song_id) & 
-    #           (db.comment.top_level == 'true') &
-    #           (db.comment.line_number == -1)).select(orderby=~db.comment.datetime).as_list()
-    #for post in posts:
-    #    configure_post(post)
-    #    load_replies(post)
-    #print(annotations)
     return dict(annotations=annotations)
 
 @action('add_post', method = "POST")
@@ -284,7 +275,6 @@ def add_post():
     )
     post = db.comment[id].as_dict()
     configure_post(post)
-    #print(post)
     return dict(post = post)
 
 @action('delete_post', method = "POST")
@@ -313,13 +303,13 @@ def vote_post():
                  (db.thumbs.rating == 1)).select().as_list()
     downvotes = db((db.thumbs.comment_id == comment_id) &
                  (db.thumbs.rating == -1)).select().as_list()
+    score = (len(upvotes)-len(downvotes))
+    db(db.comment.id == comment_id).update(score=score)
     return dict(upvotes=upvotes, downvotes=downvotes)
 
 def configure_post(post):
     user = db(db.auth_user.id == post['user_id']).select().first()
     profile = db(db.profile.user_id == post['user_id']).select().first()
-    if profile is None:
-        avatar = None
     avatar = profile.avatar
     author = user.first_name + " " + user.last_name if user is not None else "Unknown"
     upvotes = db((db.thumbs.comment_id == post['id']) &
@@ -333,7 +323,7 @@ def configure_post(post):
     #post["thumbs"] = thumbs
     
 def load_replies(post):
-    replies = db(db.comment.comment_id == post['id']).select(orderby=~db.comment.datetime).as_list()
+    replies = db(db.comment.comment_id == post['id']).select(orderby=~db.comment.score).as_list()
     post['posts'] = []
     for reply in replies:
         post['posts'].append(reply)

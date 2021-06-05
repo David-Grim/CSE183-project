@@ -43,7 +43,7 @@ db.profile.id.readable = db.profile.id.writable = False
 db.define_table(
     'band',
     Field('name', requires=IS_NOT_EMPTY()),
-    Field('image', type='upload'),
+    Field('image', type='upload', requires=IS_NOT_EMPTY()),
     Field('bio', type='text'),
     Field('time_added', default = get_time())
 )
@@ -54,7 +54,7 @@ db.define_table(
     'album',
     Field('band_id', type='reference band'),
     Field('name', requires=IS_NOT_EMPTY()),
-    Field('image', type='upload'),
+    Field('image', type='upload', requires=IS_NOT_EMPTY()),
     Field('date', type='date', requires=IS_DATE()),
     Field('time_added', default = get_time())
 )
@@ -82,7 +82,8 @@ db.define_table(
     Field('datetime', type='datetime', default=datetime.datetime.utcnow(), requires=IS_DATETIME()),
     Field('line_number', type='integer'),
     Field('post_text', requires=IS_NOT_EMPTY()),
-    Field('user_email', default= get_user_email()),
+    Field('user_email', default=get_user_email()),
+    Field('score', type='integer', default=0)
 )
 db.comment.id.readable = db.comment.id.writable = False
 db.comment.user_id.readable = db.comment.user_id.writable = False
