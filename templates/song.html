@@ -48,51 +48,56 @@
 [[block page_scripts]]
 <script type="text/x-template" id="comment-template">
     <div class="comment">
-        <div :style="indent">  
-            <div class="card is-child is-size-5">
-            <div class="box">
-                <div> {{comment.post_text}} </div>
-                <div class="is-size-5 has-text-grey"> {{comment.author}} </div>
-                <div class="is-size-3">
-                    <span v-if="comment.user_email == user_email" v-on:click="delete_post()" class="has-text-danger is-pulled-right">
-                        <i class="fa fa-trash fa-fw"></i>
-                    </span>
-                    
-                    <span v-else>
-                        <button v-on:click="replying=true" class="button is-primary is-size-10 is-pulled-right">
-                            <i class="fa fa-reply fa-fw"></i>
-                        </button>
-                        <div v-if="replying">
-                            <div class="field">
-                                <textarea v-model="input_text" class="textarea" placeholder="Type something!"></textarea>
-                            </div>
-                            <button v-on:click="add_post()" class="button is-primary is-size-5">Post</button>
-                            <button v-on:click="replying = false" class="button is-warning is-size-5">Cancel</button>
-                        </div>
-                    </span>
-                    
-                            <span>
-                                <i v-on:click="change_vote(0);"
-                                v-if="vote == 1" class="fa fa-flip-horizontal fa-thumbs-up"></i>
-                                <i v-on:click="change_vote(1);"
-                                v-if="vote != 1" class="fa fa-flip-horizontal fa-thumbs-o-up"></i>
+        <div :style="indent">
+        <div>
+            <article class="media">
+                <figure class="media-left">
+                    <p class="image is-pulled-left is-64x64">
+                    <img :src="'[[=URL('download')]]/' + comment.avatar">
+                        <p>
+                            <span v-if="vote == 1" v-on:click="change_vote(0);">
+                                <i class="fas fa-arrow-up has-text-success"></i>
                             </span>
-                            {{ count_votes() }}
-                            <span>
-                                <i v-on:click="change_vote(0);" 
-                                v-if="vote == -1" class="fa fa-thumbs-down"></i>
-                                <i v-on:click="change_vote(-1);" 
-                                v-if="vote != -1" class="fa fa-thumbs-o-down"></i>
+                            <span v-if="vote != 1" v-on:click="change_vote(1);">
+                                <i class="fas fa-arrow-up"></i>
                             </span>
-                            
+                            {{count_votes()}}
+                            <span v-if="vote == -1" v-on:click="change_vote(0);">
+                                <i class="fas fa-arrow-down has-text-danger"></i>
+                            </span>
+                            <span v-if="vote != -1" v-on:click="change_vote(-1);">
+                                <i class="fas fa-arrow-down"></i>
+                            </span>
+                        </p>
+                </figure>
+                <div class="media-content">
+                    <div class="is-size-6">
+                        <p>
+                        <strong> {{comment.author}} </strong>
+                        <div> {{comment.post_text}} </div>
+                        <br>
+                        <small>
+                            {{comment.posts.length}} Replies
+                            <a v-if="comment.posts.length && !show_children" @click="toggle_children">(Show)</a>
+                            <a v-if="comment.posts.length && show_children" @click="toggle_children">(Hide)</a>
+                            <small> · </small>
+                            <a v-on:click="replying=true">Reply</a>
+                            <small v-if="comment.user_email == user_email" v-on:click="delete_post()"> · <a>Delete</a></small>
+                            <small> · {{comment.datetime}}</small>
+                        </small>
+                        </p>
+                                <div v-if="replying">
+                                    <div class="field">
+                                        <textarea v-model="input_text" class="textarea" placeholder="Type something!"></textarea>
+                                    </div>
+                                    <button v-on:click="add_post()" class="button is-primary is-size-5">Post</button>
+                                    <button v-on:click="replying = false" class="button is-warning is-size-5">Cancel</button>
+                                </div>
+                    </div>
                 </div>
+            </article>
             </div>
-            </div>
-            <div v-if="comment.posts.length">
-                <div v-if="!show_children" @click="toggle_children">Show Replies</div>
-                <div v-else @click="toggle_children">Hide Replies</div>
-            </div>
-            <div v-else><br></div>
+            
         </div>
         <comment
             v-if="show_children"
@@ -114,7 +119,9 @@
             <a v-on:click="toggle_annotations()" class="lyrics is-size-5 has-text-black">{{line_text}}</a>
         </div>
         <div v-if="showing_annotations">
-            <div class="section">
+            
+            <div>
+                <br>
                 <!--Section for showing the form to write a post-->
                 <div v-if="commenting">
                     <div class="field">
@@ -125,10 +132,11 @@
                 </div>
                 <!--Section for when the form shouldn't be on the screen-->
                 <div v-if="!commenting">
-                    <button v-on:click="commenting=true" class="button is-primary is-size-5">
-                        <i class="fa fa-plus fa-fw"></i>
+                    <button v-on:click="commenting=true" class="button is-info is-size-5">
+                        <i class="fa fa-plus"> Comment</i>
                     </button>
                 </div>
+                <br>
             </div>
             <div v-for="thread in comment_arr" class="is-size-5">
                 <div class="container">
@@ -139,7 +147,7 @@
                         ></comment>
                 </div>
             </div>
-            <br>
+
         </div>
     </div>
 </script>

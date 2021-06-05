@@ -41,6 +41,8 @@ url_signer = URLSigner(session)
 @action('index')
 @action.uses(db, auth.user, 'index.html')
 def index():
+    user = auth.get_user()
+    db.profile.update_or_insert(user_id = user["id"]) #creates empty profile on first login
     songs = db(db.song.name).select(orderby=~db.song.time_added)
     #need to somehow pull the band name here as well
     user = auth.get_user()
@@ -65,7 +67,6 @@ def about():
 @action.uses(db, auth.user, "profile.html")
 def profile():
     user = auth.get_user()
-    db.profile.update_or_insert(user_id = user["id"])
     profile = db(db.profile.user_id == user["id"]).select().first()
     comments = db(db.comment.user_email == get_user_email()).select()
     return dict(username=user["username"], profile=profile, comments = comments)
@@ -317,13 +318,11 @@ def vote_post():
     return dict(upvotes=upvotes, downvotes=downvotes)
 
 def configure_post(post):
-    #thumbs = db(db.thumbs.comment_id == post['id']).select().as_list()
-    #for thumb in thumbs:
-    #    user = db(db.auth_user.email == thumb["user_email"]).select().first()
-    #    name = user.first_name + " " + user.last_name if user is not None else "Unknown"
-    #    thumb["name"] = name
     user = db(db.auth_user.id == post['user_id']).select().first()
-    avatar = db(db.profile.user_id == post['user_id']).select().first().avatar
+    profile = db(db.profile.user_id == post['user_id']).select().first()
+    if profile is None:
+        avatar = None
+    avatar = profile.avatar
     author = user.first_name + " " + user.last_name if user is not None else "Unknown"
     upvotes = db((db.thumbs.comment_id == post['id']) &
                  (db.thumbs.rating == 1)).select().as_list()

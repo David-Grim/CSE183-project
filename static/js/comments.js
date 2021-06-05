@@ -88,7 +88,7 @@ let init = (app) => {
         }},
         computed: {
             indent() {
-            return { transform: `translate(${this.depth * 30}px)` };
+            return { transform: `translate(${this.depth * 25}px)` };
             },
         },
         methods: {
@@ -96,9 +96,6 @@ let init = (app) => {
                 return this.comment.upvotes.length - this.comment.downvotes.length;
             },
             vote_state() {
-                //if (this.comment.upvotes.indexOf(user_id) != -1) return 1;
-                //else if (this.comment.downvotes.indexOf(user_id) != -1) return -1;
-                                        //.findIndex((post) => post.id == comment_id)
                 if (this.comment.upvotes.findIndex((vote) => vote.user_email == user_email) != -1) return 1;
                 else if (this.comment.downvotes.findIndex((vote) => vote.user_email == user_email) != -1) return -1;
                 else return 0;

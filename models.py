@@ -34,7 +34,7 @@ def get_time():
 db.define_table(
     'profile',
     Field('user_id', type='reference auth_user', unique=True),
-    Field('avatar', type='upload'),
+    Field('avatar', type='upload', default='profile.avatar.defaultavatar.png'),
     Field('bio', type='text')
 )
 db.profile.user_id.readable = db.profile.user_id.writable = False
