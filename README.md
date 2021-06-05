@@ -14,8 +14,8 @@ Demo
 
 Prerequisites
 
-    - A modern-web browser like Brave , Chrome , Firefox etc
     - Computer with internet access
+    - A modern-web browser like Brave , Chrome , Firefox etc
     
 Getting Started
 
@@ -43,6 +43,10 @@ Built With
     JS - High-level, interpreted programming language
     
     py4web -  Web framework for rapid development of efficient database driven web applications.
+    
+ Implementation
+ 
+   Ali - created the login screen, added information to the about us section, created the pink glowing text effect, fixed glitch on login screen that was showing sections, made sure colors matched between sections, changed text to a more asthetic look, fixed scrolling glitch, fixed blue highlight wbox when users are selecting pages, added sound effec gifs, changed mouse pointer, created readme
 
 Authors
 
