@@ -29,7 +29,7 @@ from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash, Field
 from py4web.utils.url_signer import URLSigner
-from .models import get_user_email, get_user_id, get_time
+from .models import get_user_email, get_user_username, get_user_id, get_time
 from py4web.utils.form import Form, FormStyleBulma
 from pydal.validators import *
 import bisect
@@ -60,13 +60,25 @@ def lyrics():
 @action.uses(db, auth.user, "about.html")
 def about():
     return dict()
-    
+
 @action("profile")
 @action.uses(db, auth.user, "profile.html")
 def profile():
+    username = get_user_username()
+    redirect(URL('profile',username))
+
+@action("profile/<profile_username>")
+@action.uses(db, auth.user, "profile.html")
+def profile(profile_username=None):
     user = auth.get_user()
-    profile = db(db.profile.user_id == user["id"]).select().first()
-    comments = db(db.comment.user_email == get_user_email()).select()
+    if profile_username is None:
+        profile_owner = user
+    else:
+        profile_owner = db(db.auth_user.username == profile_username).select().first()
+    assert profile_owner is not None
+    profile = db(db.profile.user_id == profile_owner["id"]).select().first()
+    profile.username = profile_username
+    comments = db(db.comment.user_id == profile_owner["id"]).select()
     return dict(username=user["username"], profile=profile, comments = comments, signer=url_signer)
     
 @action("edit_profile", method=["GET", "POST"])
@@ -311,7 +323,7 @@ def configure_post(post):
     user = db(db.auth_user.id == post['user_id']).select().first()
     profile = db(db.profile.user_id == post['user_id']).select().first()
     avatar = profile.avatar
-    author = user.first_name + " " + user.last_name if user is not None else "Unknown"
+    author = user.username if user is not None else "Unknown"
     upvotes = db((db.thumbs.comment_id == post['id']) &
                  (db.thumbs.rating == 1)).select().as_list()
     downvotes = db((db.thumbs.comment_id == post['id']) &

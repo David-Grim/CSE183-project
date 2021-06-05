@@ -73,7 +73,7 @@
                 <div class="media-content">
                     <div class="is-size-6">
                         <p>
-                        <strong> {{comment.author}} </strong>
+                        <a class="has-text-black" :href="'[[=URL('profile')]]/' + comment.author"><strong> {{comment.author}} </strong></a>
                         <div> {{comment.post_text}} </div>
                         <br>
                         <small>

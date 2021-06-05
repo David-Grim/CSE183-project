@@ -15,9 +15,11 @@
                         </figure>
                         <p class="title has-text-white">
                             Profile
+                            [[if (profile.username == username):]]
                             <a class="button is-primary"  href="[[=URL('edit_profile', signer=signer)]]">
-                            <span class="icon"><i class="fa fa-fw fa-edit"></i></span>
+                                <span class="icon"><i class="fa fa-fw fa-edit"></i></span>
                             </a>
+                            [[pass]]
                         </p>
                         <p>
                             <table class="table is-striped is-fullwidth">
