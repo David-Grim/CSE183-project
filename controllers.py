@@ -36,8 +36,6 @@ import bisect
 
 url_signer = URLSigner(session)
 
-
-
 @action('index')
 @action.uses(db, auth.user, 'index.html')
 def index():
@@ -69,10 +67,10 @@ def profile():
     user = auth.get_user()
     profile = db(db.profile.user_id == user["id"]).select().first()
     comments = db(db.comment.user_email == get_user_email()).select()
-    return dict(username=user["username"], profile=profile, comments = comments)
+    return dict(username=user["username"], profile=profile, comments = comments, signer=url_signer)
     
 @action("edit_profile", method=["GET", "POST"])
-@action.uses(db, session, auth.user, "form.html")
+@action.uses(db, session, auth.user, url_signer.verify(), "profile_form.html")
 def edit_profile():
     user = auth.get_user()
     db.profile.update_or_insert(user_id = user["id"])
