@@ -85,6 +85,7 @@ let init = (app) => {
             mouse_hover: false,
             show_children: (this.depth < DEFAULT_SHOW_REPLIES_DEPTH),
         }},
+        //reference: https://vuejsdevelopers.com/2017/10/23/vue-js-tree-menu-recursive-components/
         computed: {
             indent() {
             return { transform: `translate(${this.depth * 25}px)` };

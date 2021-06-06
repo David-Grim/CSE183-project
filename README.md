@@ -81,20 +81,85 @@ through these tabs was made possible by EXPLANATION HERE.  Selecting Lyrics will
 the Lyrics page, where they may browse all bands/albums/songs currently on our database. The 
 search bar on this page will offer autofill selections for text typed inside. One of our more 
 daunting tasks, the search bar was implemented INSERT EXPLANATION. If a band/album/song is not 
-in our database, users are allowed to add the given musical piece to our database. User-database 
-interactivity was implemented through INSERT EXPLANATION HERE. To add a band, users will click 
-the green “Add New Band” button, bringing them to the Add Band page. Users must enter a name and 
-photo for the newly added band, with the band bio being optional. Adding a photo was implemented 
-using INSERT EXPLANATION HERE. After submitting, users may click on a band’s name and be sent to 
-the band’s page, where they can click on the green “Add an Album” button. Users who click on this
-will be sent to the Add Album page, where they can add an album from that band to the database. 
-To be added, an album will require an album title and a release date, with the album cover art 
-being optional. Once added, users may add a song to the given album. Selecting the album for a 
+in our database, users are allowed to add the given musical piece to our database.
+
+The database consists of 6 tables: (in addition to py4web_session, auth_user, and auth_user_tag_groups)
+    db.profile
+        This table has a one to one relationship with auth_user by way of a user_id reference. 
+        It contains information about a user that is meant to be customizable and publicly displayed.
+    db.band
+        This table has a one to many relationship with both db.album and db.song.
+        It contains information about a band such as name, an image, and a bio.
+        Band entries are created using a form accessible by clicking the "add band" button 
+        on the lyrics page.
+    db.album
+        This table has a many to one relationship with bands and a one to many relationship with songs. 
+        It contains information about an ablum such as name, album artwork, and release date. 
+        Entries are created using a form accessible by clicking the "add album" button on any band page. 
+    db.song
+        This table has a many to one relationship with both bands and albums. 
+        It contains information about a song such as name and lyrics.
+        Song entries are created by clicking the "Add Song" button on an album page. 
+    db.comment
+        This table has a many to one relationship with both auth_users and songs. Comments also 
+        have a many to one relationship with other comments in that they store a single reference to the comment 
+        they are a reply to (if they are a reply) and and one comment can have many replies to it. Comments by 
+        users on a song page when they click on a line, click "+ Comment" or by clicking on the "reply" text 
+        of another comment.
+        Comments contain information intended to be public such as their text, datetime posted, and score. 
+        It also contains some non-reference fields like "top_level" and "line_number" which keep track of 
+        whether or not they are the beginning of threads and which line of lyrics they are directed at. 
+    db.thumbs
+        This table contains upvotes and downvotes made by users on comments. It has a many to one 
+        relationship with both users and comments. Thumbs are created or modified when a user 
+        clicks an up or down arrow on a comment and they are used to determine the 'score' field 
+        of that comment.
+
+To add a band, users will click the green “Add New Band” button, bringing them to the Add Band page. 
+Users must enter a name and photo for the newly added band, with the band bio being optional. Adding 
+a photo was implemented using a field of type upload. After submitting, users may click on a band’s 
+name and be sent to the band’s page, where they can click on the green “Add an Album” button. Users 
+who click on this will be sent to the Add Album page, where they can add an album from that band to 
+the database. To be added, an album will require an album title and a release date, with the album cover 
+art being optional. Once added, users may add a song to the given album. Selecting the album for a 
 song will bring the user to the album’s page, which contains album information. To add a song, 
 click the green  “Add a Song” button. There the user can add the name of the song and the song’s 
-lyrics. These three pages are linked together through python logic, bringing the user’s info and 
-current database along with it. INSERT FURTHER EXPLANATION IF NEED BE. Note that at any time 
-users can exit these pages by clicking back on their browser or clicking on the tabs above. 
+lyrics. The added song can be viewed on the song page, accessible from: the album page, a search, 
+or the recently added section on the index page. The song page is where discussion discussion takes 
+place and makes heavy use of interactive javascript.
+
+When a user visits a song page, the controller queries the information pertaining to that song, 
+its album, and its artist from the database. This information, along with 4 links relating to 
+comment actions are passed to song.html in a dict. song.html displays the relevant data using YATL.
+
+song.html also loads the js/comments.js file containing a vue instance. On intitialization,
+the vue instance makes an axios get request for the comments associated with the song. The 
+controller queries all top level comments directed at a line of lyrics for that song and then 
+recursively queries all comments that are a reply to a comment it has already queried. A list of 
+lists of comments is generated that contains all comments that have been made on that song page 
+in a format that reflects the structure in which they should be displayed. This list of lists is 
+called 'annotations' and returned to the vue object where it is interpretted as an array of arrays 
+of objects.
+
+song.html uses YATL to loop through the lines of the song and then initializes LyricLineComponents 
+by passing it the line text, a javascript reference to the appropriate subarray of the annotations array, 
+and lyric line number. LyricLineComponent is a vue component within the vue app of js/comments.js 
+that displays the line, highlights it if there are comments, and when clicked it displays 
+all of that line's comments as well as a button that allows the user to make a new (top_level)comment. 
+In order to display its comments, the LyricLineComponent loops through the array, comment_arr, that 
+has been passed into it and initializes a CommentComponent for all comments in the array.
+
+CommentComponent is another vue component that is also a child component of the vue app in 
+js/comments.js. It takes a reference to a comment, a reference to that comment's parent comment 
+(or null if it is not a reply), and a depth integer which is initialized to 0 by the LyricLineComponent
+or depth+1 if it is initialized recursively by another CommentComponent.
+
+CommentComponent displays the relevant information of the comment, such as author name, comment text, 
+vote count, and user avatar. At the end of a CommentComponent's html template, it recursively initializes more 
+CommentComponents for each object in its 'posts' array, which contains all of the comments that 
+are replies to its own comment. This component also contains methods for replying to comments, 
+deleting comments, and voting. All methods that use axios to communicate with the controller are 
+methods of app, and so CommentComponent and LyricComponent call those methods when they need to do this.
 
 Moving on, the About Us tab offers information about the site, including contact info. 
 
