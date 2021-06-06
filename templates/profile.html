@@ -16,9 +16,9 @@
                         <p class="title has-text-white">
                             Profile
                             [[if (profile.username == username):]]
-                            <button class="button is-info is-pulled-left" href="[[=URL('edit_profile', signer=signer)]]">
+                            <a class="button is-info is-pulled-left" href="[[=URL('edit_profile', signer=signer)]]">
                                 <i class="fa fa-edit">Edit Profile</i>
-                            </button>
+                            </a>
                             [[pass]]
                         </p>
                         <p>
