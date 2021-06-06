@@ -55,17 +55,17 @@
                     <p class="image is-pulled-left is-64x64">
                     <img :src="'[[=URL('download')]]/' + comment.avatar">
                         <p>
-                            <span v-if="vote == 1" v-on:click="change_vote(0);">
+                            <span v-if="vote_state() == 1" v-on:click="change_vote(0);">
                                 <i class="fas fa-arrow-up has-text-success"></i>
                             </span>
-                            <span v-if="vote != 1" v-on:click="change_vote(1);">
+                            <span v-if="vote_state() != 1" v-on:click="change_vote(1);">
                                 <i class="fas fa-arrow-up"></i>
                             </span>
                             {{count_votes()}}
-                            <span v-if="vote == -1" v-on:click="change_vote(0);">
+                            <span v-if="vote_state() == -1" v-on:click="change_vote(0);">
                                 <i class="fas fa-arrow-down has-text-danger"></i>
                             </span>
-                            <span v-if="vote != -1" v-on:click="change_vote(-1);">
+                            <span v-if="vote_state() != -1" v-on:click="change_vote(-1);">
                                 <i class="fas fa-arrow-down"></i>
                             </span>
                         </p>

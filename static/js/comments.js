@@ -84,7 +84,6 @@ let init = (app) => {
             input_text: "",
             mouse_hover: false,
             show_children: (this.depth < DEFAULT_SHOW_REPLIES_DEPTH),
-            vote: this.vote_state(),
         }},
         computed: {
             indent() {
