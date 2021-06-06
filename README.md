@@ -6,11 +6,18 @@ Introduction
 
 Demo
 
-   {demo goes heere}
-    
+   link to demo video: https://drive.google.com/file/d/14kF18WLpcU1GK-Jm6KwJ2rjBh0iigIO7/view?usp=sharing
+   (should be viewable to all in UCSC domain)
+
 **Play With It Yourself**
 
-  **->** {website link goes here} **<-**
+  **->** {https://20210604t160017-dot-proverbial-will-315715.uk.r.appspot.com/} **<-**
+
+    NOTE: The website is not fully functional. So far all we were able to get done is the initial hosting steps. Due to time constraints
+    and the overall challenge associated with hosting the website on google we were unable to get the hosted site to a fully functional state.
+    Given these challenges we didn't want to affect the overall experience our website gives. The contents of the github repo are fully functional
+    and operate as intended.
+
 
 Prerequisites
 
@@ -23,7 +30,7 @@ Getting Started
 
     2. Clone your forked repository to your local system 
 
-    git clone https://github.com/<your-username>/CSE183-project.git
+    git clone https://github.com/David-Grim/CSE183-project.git
 
     Or Download and extract the zip file.
 
@@ -34,23 +41,39 @@ Running
     cp <project location> apps/
     py4web run apps
     
-    Then just naviage to the local host and your project, for example: http://127.0.0.1:8000/CSE183-project
+    Then just navigate to the local host and your project, for example: http://127.0.0.1:8000/CSE183-project
 
 Built With
 
     HTML - Standard markup language
     Bulma.CSS - CSS, or style sheet framework, used for smooth frontend web design
     JavaScript - High-level, interpreted programming language used for web design
-	Python 3 - Object oriented programmign language, used for backend web design
+	Python 3 - Object oriented programming language, used for backend web design
     
     py4web -  Web framework for rapid development of efficient database driven web applications.
     
  Implementation
  
-   Ali - created the login screen, added information to the about us section, created the pink glowing text effect, fixed glitch on login screen that was showing sections, made sure colors matched between sections, changed text to a more asthetic look, fixed scrolling glitch, fixed blue highlight wbox when users are selecting pages, added sound effec gifs, changed mouse pointer, created readme
-   David -
-   Mark -
-   Juan - initial profile page design, generic html forms, overall touchups on most .py and .html files, minor syntax refining, proofreader
+   Ali - created the login screen, added information to the about us section, created the pink 
+   glowing text effect, fixed glitch on login screen that was showing sections, made sure colors 
+   matched between sections, changed text to a more aesthetic look, fixed scrolling glitch, fixed 
+   blue highlight box when users are selecting pages, added sound effect gifs, changed mouse 
+   pointer, created readme
+   
+   David - Initial planning of the website. Created the GitHub repository. Created the initial 
+   layout for other group members to expound on. Implemented initial versions of user comments 
+   and search bar, to be later fine tuned by Mark. Implemented string matching for the search 
+   bar. Added comment history section in the user profile page. Planned overall logistics of project. 
+   Made the demonstration video.
+   
+   Mark - Created the database, band, album, and song pages. Worked heavily on user comments, 
+   created the vue components that display lyric annotations/comment trees and the controller 
+   logic that supports the comment trees. Assisted with search bar and user profiles. Made some 
+   minor html changes to most pages to make the appearance of the website feel consistent.
+   
+   Juan - initial profile page design, generic html forms, overall touch-ups on most .py and 
+   .html files, minor syntax refining, proofreader
+
 Authors
 
     Ali Malik
@@ -67,21 +90,23 @@ website that allows users to discuss music, specifically song lyrics.
 
 Visually, our site maintains a bright, neon space that users will notice immediately. Our site’s 
 backdrop is ever shifting between a dark cyan to a medium magenta color, keeping the site lively.
-This was accomplished by INSERT EXPLANATION HERE. As well as the backdrop, our floati
-ng mouse also takes up a fuzzy pink color. This was done by INSERT EXPLANATION HERE. 
+This was accomplished by INSERT EXPLANATION HERE. As well as the backdrop, our floating mouse
+also takes up a fuzzy pink color. This was done by INSERT EXPLANATION HERE.
 
 Upon entering the site, users will be prompted to sign in or sign up, a simple process that requires an email 
-address for the user creation. The login functionality was made through the use of INSERT EXPLANATION. 
+address for the user creation. The login functionality was made through the use of the provided auth_user db.
 
 After signing up the user will be returned to the sign in screen, where they can log in. Once 
 logged in, the user will enter the home page of No Filter. There, the user is shown any recent 
 song lyrics that were added. The user may select any of the songs there and begin discussion 
 immediately, or browse through the three other tabs, Lyrics, About Us, and Profile. Navigating 
-through these tabs was made possible by EXPLANATION HERE.  Selecting Lyrics will send users to 
-the Lyrics page, where they may browse all bands/albums/songs currently on our database. The 
-search bar on this page will offer autofill selections for text typed inside. One of our more 
-daunting tasks, the search bar was implemented INSERT EXPLANATION. If a band/album/song is not 
-in our database, users are allowed to add the given musical piece to our database.
+through these tabs was made possible by a tab bar controller with the text being a link to that specific tab.
+Selecting Lyrics will send users to the Lyrics page, where they may browse all bands/albums/songs currently on
+our database. The search bar on this page will offer autofill selections for text typed inside. One of our more
+daunting tasks, the search bar was implemented by querying the various database tables, and matching the strings the
+user inputs with the results from the database tables. If a band/album/song is not in our database, users are allowed
+to add the given musical piece to our database. Users are specifically not allowed to edit preexisting entries to the
+database as to not sabotage the work of another user. That task would be given to the admins or moderators.
 
 The database consists of 6 tables: (in addition to py4web_session, auth_user, and auth_user_tag_groups)
     db.profile
@@ -94,7 +119,7 @@ The database consists of 6 tables: (in addition to py4web_session, auth_user, an
         on the lyrics page.
     db.album
         This table has a many to one relationship with bands and a one to many relationship with songs. 
-        It contains information about an ablum such as name, album artwork, and release date. 
+        It contains information about an album such as name, album artwork, and release date.
         Entries are created using a form accessible by clicking the "add album" button on any band page. 
     db.song
         This table has a many to one relationship with both bands and albums. 
@@ -110,7 +135,7 @@ The database consists of 6 tables: (in addition to py4web_session, auth_user, an
         It also contains some non-reference fields like "top_level" and "line_number" which keep track of 
         whether or not they are the beginning of threads and which line of lyrics they are directed at. 
     db.thumbs
-        This table contains upvotes and downvotes made by users on comments. It has a many to one 
+        This table contains up-votes and down-votes made by users on comments. It has a many to one
         relationship with both users and comments. Thumbs are created or modified when a user 
         clicks an up or down arrow on a comment and they are used to determine the 'score' field 
         of that comment.
@@ -132,17 +157,17 @@ When a user visits a song page, the controller queries the information pertainin
 its album, and its artist from the database. This information, along with 4 links relating to 
 comment actions are passed to song.html in a dict. song.html displays the relevant data using YATL.
 
-song.html also loads the js/comments.js file containing a vue instance. On intitialization,
+song.html also loads the js/comments.js file containing a vue instance. On initialization,
 the vue instance makes an axios get request for the comments associated with the song. The 
 controller queries all top level comments directed at a line of lyrics for that song and then 
 recursively queries all comments that are a reply to a comment it has already queried. A list of 
 lists of comments is generated that contains all comments that have been made on that song page 
 in a format that reflects the structure in which they should be displayed. This list of lists is 
-called 'annotations' and returned to the vue object where it is interpretted as an array of arrays 
+called 'annotations' and returned to the vue object where it is interpreted as an array of arrays
 of objects.
 
 song.html uses YATL to loop through the lines of the song and then initializes LyricLineComponents 
-by passing it the line text, a javascript reference to the appropriate subarray of the annotations array, 
+by passing it the line text, a javascript reference to the appropriate sub-array of the annotations array,
 and lyric line number. LyricLineComponent is a vue component within the vue app of js/comments.js 
 that displays the line, highlights it if there are comments, and when clicked it displays 
 all of that line's comments as well as a button that allows the user to make a new (top_level)comment. 
@@ -165,7 +190,10 @@ Moving on, the About Us tab offers information about the site, including contact
 
 Clicking on Profile will bring users to their profile page, showing their name, avatar icon, 
 and bio. This page contains an “Edit Profile” button, which will allow the user to edit one’s 
-avatar and bio. Profile functionality was implemented similar to adding bands and albums, and INSERT EXPLANATION. 
+avatar and bio. Profile functionality was implemented to give the user a unique profile they can edit
+freely to better reflect themselves. A comment history feature was added to allow the user (and any other
+visiting their profile) to view what comments that user has made, complete with a link to the specific
+song the comment was made.
 
 Users navigating through song lyrics will be able to click on the lyrics themselves, where they 
 will be prompted to add comments on these if they so choose. The heart of our website’s discussion 
@@ -173,8 +201,7 @@ functionality lay here. Clicking on lyrics will create a drop-down post section,
 comment on the lyrics. After posting the comment, the comment will be available to view by all 
 other users on the site, along with a reply functionality, the user’s avatar and name, and an 
 up-vote/down-vote system, allowing users to interact with one another. Replies to a comment can 
-also be replied to, as well as up-voted/down-voted. Creating such a task functioned similar to a 
-homework assignment we were given, INSERT EXPLANATION HERE.
+also be replied to, as well as up-voted/down-voted.
 
 As well as the main interactivity our website offers, we also use URL signing and INSERT EXPLANATION HERE 
 for our site’s security.
@@ -190,6 +217,6 @@ and logical complexity. If given more time for such a project, a huge addition w
 is to change the homepage to display trending song lyrics instead of mere recent song lyrics. 
 This, however, would present a much larger challenge, as we soon learned that creating a 
 “trending” function similar to sites such as Twitter requires extensive knowledge of machine 
-learning and artificial intelligence. INSERT OTHER IDEAS IF Y’ALL WANT
+learning and artificial intelligence.
 
 
