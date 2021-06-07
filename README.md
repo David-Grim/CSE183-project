@@ -90,8 +90,9 @@ website that allows users to discuss music, specifically song lyrics.
 
 Visually, our site maintains a bright, neon space that users will notice immediately. Our site’s 
 backdrop is ever shifting between a dark cyan to a medium magenta color, keeping the site lively.
-This was accomplished by INSERT EXPLANATION HERE. As well as the backdrop, our floating mouse
-also takes up a fuzzy pink color. This was done by INSERT EXPLANATION HERE.
+This was accomplished by creating a linear animated gradient that runs in an infintie 15sec loop, and by changing the background position.
+As well as the backdrop, our floating mouse
+also takes up a fuzzy pink color. This was done by setting the style of the body to a mouse cursor that links to the image from a url.
 
 Upon entering the site, users will be prompted to sign in or sign up, a simple process that requires an email 
 address for the user creation. The login functionality was made through the use of the provided auth_user db.
