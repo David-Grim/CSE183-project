@@ -1,5 +1,7 @@
 # NoFilter
 
+![homepage](https://raw.githubusercontent.com/David-Grim/CSE183-project/main/homepage.PNG)
+
 Introduction
 
    This project makes use of the py4web library and html/css/js to create a stunning music discussion website. 
