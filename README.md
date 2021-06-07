@@ -73,8 +73,11 @@ Built With
    logic that supports the comment trees. Assisted with search bar and user profiles. Made some 
    minor html changes to most pages to make the appearance of the website feel consistent.
    
-   Juan - Initial profile page design, generic html forms, overall touch-ups on most .py and 
-   .html files such as reworking controller functions to suit the given needs, minor syntax refining, proofreader
+   Juan - Initial profile page design, created/refined generic html forms (album_form, band_form, 
+   song_form, etc), overall touch-ups on most .py and .html files such as reworking controller 
+   functions to suit the given needs, linked add_album, add_song, add_band actions from 
+   controllers in order to maintain stable flow between pages, overall syntax refining, created 
+   readme write-up, proofreader/editor
 
 Authors
 
@@ -92,24 +95,27 @@ website that allows users to discuss music, specifically song lyrics.
 
 Visually, our site maintains a bright, neon space that users will notice immediately. Our site’s 
 backdrop is ever shifting between a dark cyan to a medium magenta color, keeping the site lively.
-This was accomplished by creating a linear animated gradient that runs in an infintie 15sec loop, and by changing the background position.
-As well as the backdrop, our floating mouse
-also takes up a fuzzy pink color. This was done by setting the style of the body to a mouse cursor that links to the image from a url.
+This was accomplished by creating a linear animated gradient that runs in an infintie 15sec loop, 
+and by changing the background position. As well as the backdrop, our floating mouse also takes 
+up a fuzzy pink color. This was done by setting the style of the body to a mouse cursor that links 
+to the image from a url.
 
-Upon entering the site, users will be prompted to sign in or sign up, a simple process that requires an email 
-address for the user creation. The login functionality was made through the use of the provided auth_user db.
+Upon entering the site, users will be prompted to sign in or sign up, a simple process that requires 
+an email address for the user creation. The login functionality was made through the use of the 
+provided auth_user db.
 
-After signing up, the user will be returned to the sign in screen, where they can log in. Once 
-logged in, the user will enter the home page of No Filter. There, the user is shown any recent 
-song lyrics that were added. The user may select any of the songs there and begin discussion 
-immediately, or browse through the three other tabs: Lyrics, About Us, and Profile. Navigating 
-through these tabs was made possible by a tab bar controller with the text being a link to that specific tab.
-Selecting Lyrics will send users to the Lyrics page, where they may browse all bands/albums/songs currently in
-our database. The search bar on this page will offer autofill selections for text typed inside. One of our more
-daunting tasks, the search bar was implemented by querying the various database tables, and matching the strings the
-user inputs with the results from the database tables. If a band/album/song is not in our database, users are allowed
-to add the given musical piece to our database. Users are specifically not allowed to edit preexisting entries to the
-database as to not sabotage the work of another user. That task would be given to the admins or moderators.
+After signing up, the user will be returned to the sign in screen, where they can log in. Once logged 
+in, the user will enter the home page of No Filter. There, the user is shown any recent song lyrics 
+that were added. The user may select any of the songs there and begin discussion immediately, or browse 
+through the three other tabs: Lyrics, About Us, and Profile. Navigating through these tabs was made 
+possible by a tab bar controller with the text being a link to that specific tab. Selecting Lyrics will 
+send users to the Lyrics page, where they may browse all bands/albums/songs currently in our database. 
+The search bar on this page will offer autofill selections for text typed inside. One of our more 
+daunting tasks, the search bar was implemented by querying the various database tables, and matching 
+the strings the user inputs with the results from the database tables. If a band/album/song is not in 
+our database, users are allowed to add the given musical piece to our database. Users are specifically 
+not allowed to edit preexisting entries to the database as to not sabotage the work of another user. 
+That task would be given to the admins or moderators.
 
 The database consists of 6 tables: (in addition to py4web_session, auth_user, and auth_user_tag_groups)
     db.profile
@@ -194,25 +200,25 @@ Moving on, the About Us tab offers information about the site, including contact
 Clicking on Profile will bring users to their profile page, showing their name, avatar icon, 
 and bio. This page contains an “Edit Profile” button, which will allow the user to edit one’s 
 avatar and bio. Profile functionality was implemented to give the user a unique profile they can edit
-freely to better reflect themselves. A comment history feature was added to allow the user (and any other
+freely to better reflect themselves. A comment history feature was added to allow the user (and any other user
 visiting their profile) to view what comments that user has made, complete with a link to the specific
 song the comment was made.
 
 Users navigating through song lyrics will be able to click on the lyrics themselves, where they 
 will be prompted to add comments on these if they so choose. The heart of our website’s discussion 
-functionality lay here. Clicking on lyrics will create a drop-down post section, where one may 
+functionality lay here. Clicking on lyrics will create a drop-down JavaScript post section, where one may 
 comment on the lyrics. After posting the comment, the comment will be available to view by all 
 other users on the site, along with a reply functionality, the user’s avatar and name, and an 
 up-vote/down-vote system, allowing users to interact with one another. Replies to a comment can 
 also be replied to, as well as up-voted/down-voted.
 
-As well as the main interactivity our website offers, we also use URL signing and INSERT EXPLANATION HERE 
-for our site’s security.
+As well as the main interactivity our website offers, we also use URL signing in regards to our profile 
+editing and comment posting for our site’s security.
 
 There were, unfortunately, a few bugs we were unable to fix with the encroaching deadlines. As 
 previously explained, we encountered numerous errors on hosting the site. As such, the site is 
 only accessible through the git repository for the time being. Ideally we would have more time 
-to fix such issues.One problem that may frustrate potential users occurs in the profile editing 
+to fix such issues. One problem that may frustrate potential users occurs in the profile editing 
 section. When editing a profile, our files overwrite whatever is placed (and what isn’t placed) 
 in the profile. For example, if you were to edit your profile to add a new avatar icon and saved 
 the changes, your bio would be deleted, since you did not edit the bio as well, and vice versa.
@@ -222,6 +228,7 @@ and logical complexity. If given more time for such a project, a huge addition w
 is to change the homepage to display trending song lyrics instead of mere recent song lyrics. 
 This, however, would present a much larger challenge, as we soon learned that creating a 
 “trending” function similar to sites such as Twitter requires extensive knowledge of machine 
-learning and artificial intelligence.
+learning and artificial intelligence. Another time constraint issue had us axe the idea we had for 
+implementing Spotify/Youtube into our song database such that we could play the given song on our website.
 
 
