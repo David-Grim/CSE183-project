@@ -2,7 +2,8 @@
 
 Introduction
 
-   This project makes use of the py4web library and html/css/js to create a stunning music discussion website. You can find more details about this project, watch a demo, and play with it yourself by reading below.
+   This project makes use of the py4web library and html/css/js to create a stunning music discussion website. 
+   You can find more details about this project, watch a demo, and play with it yourself by reading below.
 
 Demo
 
@@ -14,7 +15,7 @@ Demo
   **->** {https://20210604t160017-dot-proverbial-will-315715.uk.r.appspot.com/} **<-**
 
     NOTE: The website is not fully functional. So far all we were able to get done is the initial hosting steps. Due to time constraints
-    and the overall challenge associated with hosting the website on google we were unable to get the hosted site to a fully functional state.
+    and the overall challenge associated with hosting the website on Google we were unable to get the hosted site to a fully functional state.
     Given these challenges we didn't want to affect the overall experience our website gives. The contents of the github repo are fully functional
     and operate as intended.
 
@@ -49,7 +50,6 @@ Built With
     Bulma.CSS - CSS, or style sheet framework, used for smooth frontend web design
     JavaScript - High-level, interpreted programming language used for web design
 	Python 3 - Object oriented programming language, used for backend web design
-    
     py4web -  Web framework for rapid development of efficient database driven web applications.
     
  Implementation
@@ -71,8 +71,8 @@ Built With
    logic that supports the comment trees. Assisted with search bar and user profiles. Made some 
    minor html changes to most pages to make the appearance of the website feel consistent.
    
-   Juan - initial profile page design, generic html forms, overall touch-ups on most .py and 
-   .html files, minor syntax refining, proofreader
+   Juan - Initial profile page design, generic html forms, overall touch-ups on most .py and 
+   .html files such as reworking controller functions to suit the given needs, minor syntax refining, proofreader
 
 Authors
 
@@ -85,7 +85,7 @@ Write-up
 
 	Project: Music Review and Discussion, aka “No Filter”
 
-Our web application project, a music review and discussion site that we dubbed No Filter, is a 
+Our web application project, a music review and discussion site that we dubbed "No Filter", is a 
 website that allows users to discuss music, specifically song lyrics. 
 
 Visually, our site maintains a bright, neon space that users will notice immediately. Our site’s 
@@ -96,12 +96,12 @@ also takes up a fuzzy pink color. This was done by INSERT EXPLANATION HERE.
 Upon entering the site, users will be prompted to sign in or sign up, a simple process that requires an email 
 address for the user creation. The login functionality was made through the use of the provided auth_user db.
 
-After signing up the user will be returned to the sign in screen, where they can log in. Once 
+After signing up, the user will be returned to the sign in screen, where they can log in. Once 
 logged in, the user will enter the home page of No Filter. There, the user is shown any recent 
 song lyrics that were added. The user may select any of the songs there and begin discussion 
-immediately, or browse through the three other tabs, Lyrics, About Us, and Profile. Navigating 
+immediately, or browse through the three other tabs: Lyrics, About Us, and Profile. Navigating 
 through these tabs was made possible by a tab bar controller with the text being a link to that specific tab.
-Selecting Lyrics will send users to the Lyrics page, where they may browse all bands/albums/songs currently on
+Selecting Lyrics will send users to the Lyrics page, where they may browse all bands/albums/songs currently in
 our database. The search bar on this page will offer autofill selections for text typed inside. One of our more
 daunting tasks, the search bar was implemented by querying the various database tables, and matching the strings the
 user inputs with the results from the database tables. If a band/album/song is not in our database, users are allowed
@@ -110,34 +110,34 @@ database as to not sabotage the work of another user. That task would be given t
 
 The database consists of 6 tables: (in addition to py4web_session, auth_user, and auth_user_tag_groups)
     db.profile
-        This table has a one to one relationship with auth_user by way of a user_id reference. 
+        This table has a one-to-one relationship with auth_user by way of a user_id reference. 
         It contains information about a user that is meant to be customizable and publicly displayed.
     db.band
-        This table has a one to many relationship with both db.album and db.song.
+        This table has a one-to-many relationship with both db.album and db.song.
         It contains information about a band such as name, an image, and a bio.
-        Band entries are created using a form accessible by clicking the "add band" button 
+        Band entries are created using a form accessible by clicking the "Add New Band" button 
         on the lyrics page.
     db.album
-        This table has a many to one relationship with bands and a one to many relationship with songs. 
+        This table has a many-to-one relationship with bands and a one-to-many relationship with songs. 
         It contains information about an album such as name, album artwork, and release date.
-        Entries are created using a form accessible by clicking the "add album" button on any band page. 
+        Entries are created using a form accessible by clicking the "Add an Album" button on any band page. 
     db.song
-        This table has a many to one relationship with both bands and albums. 
+        This table has a many-to-one relationship with both bands and albums. 
         It contains information about a song such as name and lyrics.
-        Song entries are created by clicking the "Add Song" button on an album page. 
+        Song entries are created by clicking the "Add a Song" button on an album page. 
     db.comment
-        This table has a many to one relationship with both auth_users and songs. Comments also 
-        have a many to one relationship with other comments in that they store a single reference to the comment 
-        they are a reply to (if they are a reply) and and one comment can have many replies to it. Comments by 
+        This table has a many-to-one relationship with both auth_users and songs. Comments also 
+        have a many-to-one relationship with other comments in that they store a single reference to the comment 
+        they are a reply to (if they are a reply) and one comment can have many replies to it. Comments by 
         users on a song page when they click on a line, click "+ Comment" or by clicking on the "reply" text 
         of another comment.
         Comments contain information intended to be public such as their text, datetime posted, and score. 
         It also contains some non-reference fields like "top_level" and "line_number" which keep track of 
         whether or not they are the beginning of threads and which line of lyrics they are directed at. 
     db.thumbs
-        This table contains up-votes and down-votes made by users on comments. It has a many to one
+        This table contains up-votes and down-votes made by users on comments. It has a many-to-one
         relationship with both users and comments. Thumbs are created or modified when a user 
-        clicks an up or down arrow on a comment and they are used to determine the 'score' field 
+        clicks an up or down arrow on a comment and are used to determine the 'score' field 
         of that comment.
 
 To add a band, users will click the green “Add New Band” button, bringing them to the Add Band page. 
@@ -154,7 +154,7 @@ or the recently added section on the index page. The song page is where discussi
 place and makes heavy use of interactive javascript.
 
 When a user visits a song page, the controller queries the information pertaining to that song, 
-its album, and its artist from the database. This information, along with 4 links relating to 
+its album, and its artist from the database. This information, along with four links relating to 
 comment actions are passed to song.html in a dict. song.html displays the relevant data using YATL.
 
 song.html also loads the js/comments.js file containing a vue instance. On initialization,
@@ -163,7 +163,7 @@ controller queries all top level comments directed at a line of lyrics for that 
 recursively queries all comments that are a reply to a comment it has already queried. A list of 
 lists of comments is generated that contains all comments that have been made on that song page 
 in a format that reflects the structure in which they should be displayed. This list of lists is 
-called 'annotations' and returned to the vue object where it is interpreted as an array of arrays
+called 'annotations' and is returned to the vue object where it is interpreted as an array of arrays
 of objects.
 
 song.html uses YATL to loop through the lines of the song and then initializes LyricLineComponents 
@@ -206,11 +206,13 @@ also be replied to, as well as up-voted/down-voted.
 As well as the main interactivity our website offers, we also use URL signing and INSERT EXPLANATION HERE 
 for our site’s security.
 
-There were, unfortunately, a few bugs we were unable to fix with the encroaching deadlines. One 
-that may frustrate potential users occurs in the profile editing section. When editing a profile, 
-our files overwrite whatever is placed (and what isn’t placed) in the profile. For example, if you 
-were to edit your profile to add a new avatar icon and saved the changes, your bio would be deleted,
-since you did not edit the bio as well, and vice versa.
+There were, unfortunately, a few bugs we were unable to fix with the encroaching deadlines. As 
+previously explained, we encountered numerous errors on hosting the site. As such, the site is 
+only accessible through the git repository for the time being. Ideally we would have more time 
+to fix such issues.One problem that may frustrate potential users occurs in the profile editing 
+section. When editing a profile, our files overwrite whatever is placed (and what isn’t placed) 
+in the profile. For example, if you were to edit your profile to add a new avatar icon and saved 
+the changes, your bio would be deleted, since you did not edit the bio as well, and vice versa.
 
 There were certain ideas we brainstormed as well that did not make the cut due to time constraints 
 and logical complexity. If given more time for such a project, a huge addition we would have made
